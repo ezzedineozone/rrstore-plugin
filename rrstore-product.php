@@ -7,7 +7,7 @@
 * Author: Ezzedine Al Ozon
 */
 
-function plugin_activate(){
+function product_plugin_activate(){
     add_option( $option = "default", $value = '', $deprecated = '', $autoload = 'yes' );
     add_role('editor', array(
         'read' => true,
@@ -47,20 +47,20 @@ function rrstore_product(){
         'public' => true,
         'label' => 'products',
         'supports' => array ('title', 'editor'),
-        'rewrite' => array('slug' => 'product'),
+        'rewrite' => array('slug' => 'products'),
         'labels' => $labels,
         'has_archive' => true
     );
-    register_post_type('product', $args);
+    register_post_type('products', $args);
 }
 function register_templates($template){
-    if(is_singular('product'))
+    if(is_singular('products'))
     {
         $custom_template = plugin_dir_path(__FILE__) . 'rrstore-plugin/templates/single-product.php';
         if(file_exists($custom_template))
             return $custom_template;
     }
-    else if(is_post_type_archive('product'))
+    else if(is_post_type_archive('products'))
     {
         $custom_template = plugin_dir_path(__FILE__) . 'rrstore-plugin/templates/archive-product.php';
         if(file_exists($custom_template))
@@ -68,7 +68,6 @@ function register_templates($template){
     }
     return $template;
 }
-
 function get_product_archive_template()
 {
     return plugin_dir_path(__FILE__) . "rrstore-plugin/templates/archive-product.php";
@@ -78,6 +77,18 @@ function product_plugin_active(){
     $active_plugins = get_option('active_plugins');
     return in_array($plugin_file, $active_plugins);
 }
-register_activation_hook(__FILE__, 'plugin_activate');
+function rrstore_product_script(){
+    wp_enqueue_script('rrstore-product-js', plugin_dir_url(__FILE__) . 'rrstore-plugin/rrstore.js');
+}
+function rrstore_product_dependencies(){
+    if(!is_plugin_active('rrstore-cart.php'))
+    {
+        deactivate_plugins(plugin_basename(__FILE__));
+        wp_die('INVALID DEPENDENCIES');
+    }
+}
+register_activation_hook(__FILE__, 'rrstore_product_dependencies: required: rrstore-cart');
+register_activation_hook(__FILE__, 'product_plugin_activate');
 add_action('init', 'rrstore_product');
 add_filter('template_include', 'register_templates');
+add_action('wp_enqueue_scripts', 'rrstore_product_script');
