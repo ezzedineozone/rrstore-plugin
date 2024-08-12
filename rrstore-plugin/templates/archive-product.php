@@ -8,7 +8,7 @@
 <div class = "products-container">
     <?php
         $args = array(
-            'post_type' => 'product',
+            'post_type' => 'products',
             'orderby' => 'date',
             'order' => 'DESC'
         );
@@ -22,7 +22,24 @@
             <h3 class = "product-card-title" id = "<?php echo $post_slug . '_title'; ?>"><?php the_title()?></h3>
             <p class = "product-card-description" id = "<?php echo $post_slug . '_description'; ?>">Product Summary</p>
         </div>
-        <img src="<?php echo site_url() ?>/wp-content/plugins/rrstore-plugin/images/sample-product.png" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
+        <div class = "product-card-image-container">
+            <div class = "product-card-image">
+            <?php
+                $img_id = get_post_meta(get_the_ID(), '_my_image_attachment_id', true);
+                $img = wp_get_attachment_url($img_id);
+                if(!$img):
+                ?>
+                <img src="<?php echo site_url() ?>/wp-content/plugins/rrstore-plugin/images/sample-product.png" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
+                <?php
+                else :
+                ?>
+                <img src="<?php echo wp_get_attachment_url(get_post_meta(get_the_ID(), '_my_image_attachment_id', true)); ?>" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
+                <?php endif;?>
+            </div>
+        </div>
+        <div class = "product-card-price-container">
+            <p class = "product-card-price">$<?php echo get_post_meta(get_the_ID(), 'product_price', true)?></p>
+        </div>
         <div class = "product-card-actions-container" id = "<?php echo $post_slug . '_card'; ?>">
                 <button class = "product-card-actions-details" id = "<?php echo $post_slug . '_info'; ?>" onclick="showProductInfo(this)">Info</Button>
                 <button class = "product-card-actions-cart" id = "<?php echo $post_slug . '_cart'; ?>">
