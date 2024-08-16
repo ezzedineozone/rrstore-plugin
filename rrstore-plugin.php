@@ -49,10 +49,12 @@ function rrstore_product(){
         'supports' => array ('title', 'editor'),
         'rewrite' => array('slug'=> 'products'),
         'labels' => $labels,
-        'has_archive' => true
+        'has_archive' => true,
+        'taxonomies' => array('category')
     );
     register_post_type('products', $args);
 }
+
 function add_product_price()
 {
     add_meta_box(
@@ -121,6 +123,13 @@ function register_templates($template){
         if(file_exists($custom_template))
             return $custom_template; 
     }
+    else if(is_category())
+    {
+        $custom_template = plugin_dir_path(__FILE__) . 'rrstore-plugin/templates/category.php';
+        if(file_exists($custom_template))
+            return $custom_template;
+    }
+
     return $template;
 }
 function get_product_archive_template()
@@ -133,9 +142,10 @@ function product_plugin_active(){
     return in_array($plugin_file, $active_plugins);
 }
 function rrstore_product_script(){
-    if(is_page('cart') || is_post_type_archive('products')):
-        wp_enqueue_script('product-js', plugin_dir_url(__FILE__) . '/rrstore-plugin/product.js', array('jquery'), null , true);
+    if(is_page('cart') || is_post_type_archive('products') || is_category()):
+        wp_enqueue_script('product-js', plugin_dir_url(__FILE__) . '/rrstore-plugin/products.js', array('jquery'), null , true);
         wp_enqueue_script('cart-js', plugin_dir_url(__FILE__) . '/rrstore-plugin/cart.js', array('jquery', 'product-js'), null, true);
+        wp_enqueue_script('alpine-js', 'https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/alpine.min.js',array(),null, true);
         wp_localize_script('cart-js', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
     endif;
 }

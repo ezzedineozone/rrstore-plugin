@@ -7,24 +7,31 @@
 
 <?php get_header() ?>
 <div class="products-page-container">
-    <div class="products-page-actions">
-        <div class="flex flex-row justify-start w-max top-0 left-0 absolute">
-            <button class="bg-blue-800 px-2 py-1 w-max" id="open-filter-menu-button">
-                <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5" />
-                </svg>
-            </button>
+        <div class="products-page-actions">
+            <div class="flex flex-row justify-start w-max top-0 left-0 absolute">
+                <button class="bg-blue-800 px-2 py-1 w-max" id="open-filter-menu-button">
+                    <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5" />
+                    </svg>
+                </button>
+            </div>
+            <h1 class="products-page-title">
+                Browse Products
+            </h1>
         </div>
-        <h1 class="products-page-title">
-            Browse Products
-        </h1>
-    </div>
     <div class="products-container relative">
         <?php
+        $category_slug = get_query_var('category_name');
         $args = array(
             'post_type' => 'products',
             'orderby' => 'date',
-            'order' => 'DESC'
+            'order' => 'DESC',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'category',  // Adjust taxonomy if necessary
+                    'field'    => 'slug',
+                    'terms'    => $category_slug,
+                ),)
         );
         $query = new WP_Query($args);
         if ($query->have_posts()) :
@@ -161,7 +168,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 
