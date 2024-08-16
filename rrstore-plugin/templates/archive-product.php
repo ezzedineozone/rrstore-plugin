@@ -21,14 +21,14 @@
     </div>
     <div class="products-container relative">
         <?php
-        $args = array(
-            'post_type' => 'products',
-            'orderby' => 'date',
-            'order' => 'DESC'
-        );
-        $query = new WP_Query($args);
-        if ($query->have_posts()) :
-            while ($query->have_posts()) : $query->the_post();
+        if(!function_exists('product_plugin_active'))
+        {
+            echo `<h1>rrstore plugin not activated!</h1>`;
+            return;
+        }
+        $query = new WP_Query();
+        if (have_posts()) :
+            while (have_posts()) : the_post();
                 $post_slug = get_post_field('post_name', get_the_ID());
         ?>
                 <div class="product-card ">
@@ -80,87 +80,86 @@
             </button>
         </div>
         <div class="categories-container-content">
-            <div class="price-picker">
-                <label class="categories-container-title">Price Range:</label>
-                <div x-data="range()" x-init="mintrigger(); maxtrigger()" class="relative max-w-xl w-full">
-                    <div class="mb-4">
-                        <input type="range"
-                            step="5"
-                            x-bind:min="min" x-bind:max="max"
-                            x-on:input="mintrigger"
-                            x-model="minprice"
-                            class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
-
-                        <input type="range"
-                            step="5"
-                            x-bind:min="min" x-bind:max="max"
-                            x-on:input="maxtrigger"
-                            x-model="maxprice"
-                            class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
-
-                        <div class="relative z-10 h-2">
-
-                            <div class="absolute z-10 left-0 right-0 bottom-0 top-0 rounded-md bg-white"></div>
-
-                            <div class="absolute z-20 top-0 bottom-0 rounded-md bg-blue-800" x-bind:style="'right:'+maxthumb+'%; left:'+minthumb+'%'"></div>
-
-                            <div class="absolute z-30 w-6 h-6 top-0 left-0 bg-blue-800 rounded-full -mt-2 -ml-1" x-bind:style="'left: '+minthumb+'%'"></div>
-
-                            <div class="absolute z-30 w-6 h-6 top-0 right-0 bg-blue-800 rounded-full -mt-2 -mr-3" x-bind:style="'right: '+maxthumb+'%'"></div>
-
-                        </div>
-                        <div class="flex justify-between items-center space-x-2 pt-4">
+            <form>
+                <div class="price-picker mb-6">
+                <label class = "categories-container-title">Price range:</label>
+                    <div class=" m-4 flex justify-center items-center">
+                        <div x-data="range()" x-init="mintrigger(); maxtrigger()" class="relative w-full">
                             <div>
-                                <input type="number" maxlength="5" x-on:input="mintrigger" x-model="minprice" class=" border border-gray-200 rounded w-full text-center price-input-boxes" id="price-input-low">
+                                <input type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="mintrigger" x-model="minprice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+
+                                <input type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="maxtrigger" x-model="maxprice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+
+                                <div class="relative z-10 h-2">
+
+                                    <div class="absolute z-10 left-0 right-0 bottom-0 top-0 rounded-md bg-gray-200"></div>
+
+                                    <div class="absolute z-20 top-0 bottom-0 rounded-md bg-blue-800" x-bind:style="'right:'+maxthumb+'%; left:'+minthumb+'%'"></div>
+
+                                    <div class="absolute z-30 w-6 h-6 top-0 left-0 bg-blue-800 rounded-full -mt-2" x-bind:style="'left: '+minthumb+'%'"></div>
+
+                                    <div class="absolute z-30 w-6 h-6 top-0 right-0 bg-blue-800 rounded-full -mt-2" x-bind:style="'right: '+maxthumb+'%'"></div>
+
+                                </div>
+
                             </div>
-                            <div>
-                                <input type="number" maxlength="5" x-on:input="maxtrigger" x-model="maxprice" class=" border border-gray-200 rounded w-full text-center price-input-boxes" id="price-input-high">
+
+                            <div class="flex items-center justify-between pt-5 space-x-4 text-sm text-gray-700">
+                                <div>
+                                    <input type="text" maxlength="5" name="min-price" x-on:input.debounce="mintrigger" x-model="minprice"
+                                        wire:model.debounce.300="minPrice"
+                                        class="w-24 px-3 py-2 text-center border border-gray-200 rounded-lg bg-gray-50 focus:border-yellow-400 focus:outline-none">
+                                </div>
+                                <div>
+                                    <input type="text" name="max-price" maxlength="5" x-on:input.debounce.300="maxtrigger" x-model="maxprice"
+                                        wire:model.debounce="maxPrice"
+                                        class="w-24 px-3 py-2 text-center border border-gray-200 rounded-lg bg-gray-50 focus:border-yellow-400 focus:outline-none">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class = "space-y-2 flex flex-col">
-                <label class = "categories-container-title">Chose a category:</label>
-                <button id="dropdownDelayButton" data-dropdown-toggle="dropdownDelay" data-dropdown-delay="500" data-dropdown-trigger="hover" class="text-white w-3/5 h-10 bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                Category 
-                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-                </button>
-
-                <!-- Dropdown menu -->
-                <div id="dropdownDelay" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                <div class="space-y-2 flex flex-col">
+                    <label class="categories-container-title">Chose a category:</label>
+                    <button id="dropdownDelayButton" data-dropdown-toggle="dropdownDelay" class="text-white w-3/5 h-10 bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                        <p id="category-slug-text">Category</p>
+                        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <input name="category-slug" id="category-slug-input" hidden />
+                    <!-- Dropdown menu -->
+                    <div id="dropdownDelay" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDelayButton">
                             <?php
-                                $categories = get_categories(array(
-                                    'hide_empty' => false
-                                ));
-                                $categories = array_filter($categories, function($category)
-                                {
-                                    return $category->name !== 'Uncategorized';
-                                });
-                                foreach ( $categories as $category ) :
-                                    $category_link = get_category_link($category);
-                                    ?>
-                                    <li>
-                                        <button onclick="handleCategoryClick('<?php echo esc_js($category_link); ?>'); return false;" class="flex justify-start items-center pl-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 w-full  dark:hover:text-white">
-                                            <?php echo esc_html($category->name); ?>
-                                        </button>
-                                    </li>
-                                    <?php
-                                endforeach;
+                            $categories = get_categories(array(
+                                'hide_empty' => false
+                            ));
+                            $categories = array_filter($categories, function ($category) {
+                                return $category->name !== 'Uncategorized';
+                            });
+                            foreach ($categories as $category) :
+                                $category_link = get_category_link($category);
+                            ?>
+                                <li>
+                                    <button onclick="handleCategoryClick('<?php echo esc_js($category_link); ?>'); return false;" class="flex justify-start items-center pl-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 w-full  dark:hover:text-white">
+                                        <?php echo esc_html($category->name); ?>
+                                    </button>
+                                </li>
+                            <?php
+                            endforeach;
                             ?>
                         </ul>
                     </div>
                 </div>
                 <div class="w-full flex flex-row space-x-2 justify-start items-center mb-4 pt-4">
-                    <button class="px-3 py-2 bg-blue-800 text-white rounded-md" id = "filter-apply-button">Apply</button>
-                    <button class="px-3 py-2 bg-red-600 text-white rounded-md" id = "filter-reset-button">Reset</button>
+                    <button type="submit" class="px-3 py-2 bg-blue-800 text-white rounded-md" id="filter-apply-button">Apply</button>
+                    <button class="px-3 py-2 bg-red-600 text-white rounded-md" id="filter-reset-button">Reset</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 
 </div>
 

@@ -1,6 +1,6 @@
 //all post info related to a specific product has the following format: {slug}_{property}
 //  for example, a given producti mage has "test-product-5"_img id
-let selected_category_filter = '';
+let selected_category_filter = "";
 function showProductInfo(e)
 {
     let slug =  get_slug(e.id);
@@ -12,24 +12,46 @@ function get_slug(id)
 };
 function range() {
     return {
-      minprice: 0, 
-      maxprice: 200,
-      min: 0, 
-      max: 200,
+      minprice: 0,
+      maxprice: 10000,
+      min: 0,
+      max: 10000,
       minthumb: 0,
-      maxthumb: 100, 
-      
-      mintrigger() {   
-        this.minprice = Math.min(this.minprice, this.maxprice - 0);      
+      maxthumb: 0,
+      mintrigger() {
+        this.validation();
+        this.minprice = Math.min(this.minprice, this.maxprice - 500);
         this.minthumb = ((this.minprice - this.min) / (this.max - this.min)) * 100;
       },
-       
       maxtrigger() {
-        this.maxprice = Math.max(this.maxprice, this.minprice + 0); 
-        this.maxthumb = 100 - (((this.maxprice - this.min) / (this.max - this.min)) * 100);    
-      }, 
+        this.validation();
+        this.maxprice = Math.max(this.maxprice, this.minprice + 200);
+        this.maxthumb = 100 - (((this.maxprice - this.min) / (this.max - this.min)) * 100);
+      },
+      validation() {
+        if (/^\d*$/.test(this.minprice)) {
+          if (this.minprice > this.max) {
+            this.minprice = 9500;
+          }
+          if (this.minprice < this.min) {
+            this.minprice = this.min;
+          }
+        } else {
+          this.minprice = 0;
+        }
+        if (/^\d*$/.test(this.maxprice)) {
+          if (this.maxprice > this.max) {
+            this.maxprice = this.max;
+          }
+          if (this.maxprice < this.min) {
+            this.maxprice = 200;
+          }
+        } else {
+          this.maxprice = 10000;
+        }
+      }
     }
-}
+  }
 function handleCategoryClick(url){
     selected_category_filter = url;
     let category = getCategoryFromUrl(url);
@@ -37,6 +59,7 @@ function handleCategoryClick(url){
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                 </svg>`;
     document.getElementById('dropdownDelay').classList.add('hidden');
+    document.getElementById('category-slug-input').value = getSlugFromUrl(url);
 }
 function getCategoryFromUrl(url) {
     const urlObj = new URL(url);
@@ -49,6 +72,15 @@ function getCategoryFromUrl(url) {
     }
 
     return null;
+}
+function getSlugFromUrl(url)
+{
+    const urlObject = new URL(url);
+    const pathname = urlObject.pathname;
+    const segments = pathname.split('/');
+    const slug = segments[segments.length - 2];
+
+    return slug;
 }
 jQuery(document).ready(function($){
     let maxwidth = screen.width;
@@ -97,7 +129,6 @@ jQuery(document).ready(function($){
             $('.qty-text-input').removeClass('bg-gray-300');
         });
         $('#filter-apply-button').click(()=>{
-            debugger;
             if(selected_category_filter !== '')
             {
                 window.location.href = selected_category_filter;
@@ -109,12 +140,15 @@ jQuery(document).ready(function($){
         });
     }
     function maintainValidPriceRange(){
-        $('#price-input-high').attr('max', 200);
-        $('#price-input-high').attr('min', $('#price-input-low').attr('min'));
-        $('#price-input-low').attr('max', $('price-input-high').attr('max'));
-        $('#price-input-low').attr('min',0);
+        $('#max-price-filter').attr('max', 10000);
+        $('#max-price-filter').attr('min', $('#price-input-low').attr('min'));
+        $('#min-price-filter').attr('max', $('price-input-high').attr('max'));
+        $('#min-price-filter').attr('min',0);
     }
-    $('.price-input-boxes').on('change', ()=>{
+    $('#min-price-filter').on('input', ()=>{
+        maintainValidPriceRange();
+    });
+    $('#max-price-filter').on('input', ()=>{
         maintainValidPriceRange();
     });
     $(window).resize(function() 

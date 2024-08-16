@@ -83,6 +83,37 @@ function save_product_price($post_id)
         update_post_meta($post_id, 'product_price', $image_id);
     }
 }
+function filter_product_by_price($query){
+    if(!is_admin() && $query->is_main_query() && (is_post_type_archive('products') || is_category()))
+    {
+        $min_price = isset($_GET['min-price'])?floatval($_GET['min-price']):0;
+        $max_price = isset($_GET['max-price'])?floatval($_GET['max-price']):200;
+        $category_slug = isset($_GET['category-slug'])?$_GET['category-slug']:"category";
+        $meta_query = array(
+            array(
+                'key'     => 'product_price',
+                'value'   => array($min_price, $max_price),
+                'compare' => 'BETWEEN',
+                'type'    => 'NUMERIC'
+            )
+        );
+        $tax_query = array();
+        if ($category_slug && $category_slug !== 'category' && $category_slug !== 'Category') {
+            $tax_query = array(
+                array(
+                    'taxonomy' => 'category',
+                    'field'    => 'slug',
+                    'terms'    => $category_slug,
+                    'operator' => 'IN',
+                )
+            );
+        }
+        $query->set('meta_query',$meta_query);
+        if($tax_query !== array())
+            $query->set('tax_query', $tax_query);
+    }
+}
+add_action('pre_get_posts', 'filter_product_by_price');
 function add_image_meta_box(){
     add_meta_box(
         'product_image',

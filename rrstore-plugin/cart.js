@@ -265,7 +265,6 @@ function setEventHandlers()
         else if(window.location.href === cartUrl)
         {
             $('.delete-button').click((e)=>{
-                debugger;
                 let slug = get_slug(e.currentTarget.id);
                 removeFromCartAll(slug);
             });
@@ -331,7 +330,6 @@ async function update_page_UI()
 
             let cart_button_id = '#' + slug + '_cart';
             let old_html_cart = $(cart_button_id).clone(true);
-            debugger;
             $(cart_button_id).replaceWith(`
                 <button class = "delete-button" id = "${cart_button_id.substring(1,cart_button_id.length)}">
                     <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -340,7 +338,6 @@ async function update_page_UI()
                 </button>`);
             $(cart_button_id).click(async ()=>{
                 await removeFromCartAll(slug);
-                debugger;
                 $(cart_button_id).replaceWith(old_html_cart);
                 $(info_btn_id).replaceWith(old_html_info);
             });
@@ -411,6 +408,14 @@ async function update_page_UI()
                 searching: true
             });  
         }
+        debugger;
+        let total_price = 0;
+        for(let [key,value] of user_cart)
+        {
+            total_price += await getProductPrice_PHP(key) * value;
+        }
+        let price_str = "Subtotal: " + "<p class = \"text-blue-800\">$" + total_price+ "</p>" +"<p class = \"text-lg mt-4\">Enter your address below to proceed</p>";
+        $('#total-price').html(price_str);
     }
 }
 
@@ -436,7 +441,6 @@ function get_slug(id)
 
 update_page_UI();
 $('#cart-table').on('draw.dt', function() {
-    debugger;
     setEventHandlers();
 });
 });
