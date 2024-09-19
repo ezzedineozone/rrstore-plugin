@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.4.7"
+  },
+  "scripts": {
+    "build": "npx tailwindcss -i ./rrstore-plugin/rrstore-style.css -o ./rrstore-plugin/css/main-style.css",
+    "watch": "npx tailwindcss -i ./rrstore-plugin/rrstore-style.css -o ./rrstore-plugin/css/main-style.css --watch"
+  }
+}
