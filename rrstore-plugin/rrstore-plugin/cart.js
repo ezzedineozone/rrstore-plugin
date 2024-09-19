@@ -1,7 +1,7 @@
 var user_cart = new Map();
 var table;
 var table_data;
-
+let page_vertical = false;
 //NOTE FOR FUTURE SELF: every function postfixd by _PHP makes a call to the php client to get or modify information about
 //the cart from the session cookie
 console.log('cart-js loaded');
@@ -42,7 +42,7 @@ async function addToCart_PHP(slug, quantity) {
                     user_cart.set(slug, user_cart.get(slug) + quantity);
                 else 
                     user_cart.set(slug, quantity);
-                update_table_data();
+                update_page_UI();
             } else {
                 console.error('Error:', response.data);
             }
@@ -66,7 +66,7 @@ async function removeFromCartSingle(slug) {
                     user_cart.delete(slug);
                 else
                     user_cart.set(slug, user_cart.get(slug) - 1);
-                update_table_data();
+                update_page_UI();
             } else {
                 console.error('Error:', response.data);
             }
@@ -87,7 +87,7 @@ async function removeFromCartAll(slug){
             {
                 console.log('succesfully removed all ' + slug);
                 user_cart.delete(slug);
-                update_table_data();
+                update_page_UI();
             }
         }
     })
@@ -191,6 +191,7 @@ async function updateUserCart()
 
 function setEventHandlers()
 {
+    console.log("running");
     if($('.products-container').length > 0)
         {
             $('.product-card-actions-cart').click(async (e) => {
@@ -202,14 +203,14 @@ function setEventHandlers()
                     let old_html_info = $(info_btn_id).clone(true);
                     $(info_btn_id).replaceWith(`
                         <div class="relative flex items-center max-w-[8rem]" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
-                            <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                            <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                                <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
                                 </svg>
                             </button>
-                            <input type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 qty-text-input" value="${qty}" required />
-                            <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                            <input type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 qty-text-input" value="${qty}" required />
+                            <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                                <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
                                 </svg>
                             </button>
@@ -264,18 +265,13 @@ function setEventHandlers()
         }
         else if(window.location.href === cartUrl)
         {
-            $('.delete-button').click((e)=>{
-                let slug = get_slug(e.currentTarget.id);
-                removeFromCartAll(slug);
-            });
         }
 }
 async function update_page_UI()
 {
-    setEventHandlers();
+    await getCart_PHP();
     if(window.location.href === productsUrl)
     {
-        await getCart_PHP();
         for(let [key, value] of user_cart)
         {
             let slug  = key;
@@ -283,14 +279,14 @@ async function update_page_UI()
             let old_html_info = $(info_btn_id).clone(true);
             $(info_btn_id).replaceWith(`
                 <div class="relative flex items-center max-w-[8rem]" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
-                    <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                        <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                        <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
                         </svg>
                     </button>
-                    <input type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 qty-text-input" value="${value}" required />
-                    <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                        <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <input type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5  qty-text-input" value="${value}" required />
+                    <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                        <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
                         </svg>
                     </button>
@@ -347,74 +343,12 @@ async function update_page_UI()
     {
         await getCart_PHP();
         update_table_data();
-        if(!table)
-        {
-            table = $('#cart-table').DataTable({
-                dom: 'rtip',
-                "language": {
-                    "info": ""
-                },
-                "paging": false,
-                "scrollY": false ,
-                ajax:function(data, callback, settings){
-                    callback({
-                        data: table_data
-                    });
-                },
-                columns: [{title: 'Product Name',
-                    render: function (data,type,row)
-                    {
-                        let slug_split = data.split('-');
-                        let return_str = '';
-                        let count = 0;
-                        for(let str of slug_split)
-                        {
-                            if(count == 0)
-                            {
-                                return_str += str.charAt(0).toUpperCase() + str.substring(1, str.length) + " ";
-                                count++;
-                            }
-                            else 
-                                return_str += str + " ";
-                        }
-                        return return_str;
-                    }
-                }, {title: 'Ammount'}, {title:'Price',
-                    render: function(data,type,row)
-                    {
-                        return '$' + data;
-                    }
-                } , {title: 'Actions',
-                    render: function(data,type,row)
-                    {
-                        var slug = row[0];
-                        var edit_btn_id = '\''+ slug +'_edit-button\'';
-                        var delete_btn_id = '\''+ slug +'_delete-button\'';
-                        return `<div class = 'cart-item-actions'>
-                                    <button class = 'edit-button' id = ${edit_btn_id}>
-                                        <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z" clip-rule="evenodd"/>
-                                        <path fill-rule="evenodd" d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </button>
-                                    <button class = 'delete-button' id = ${delete_btn_id}>
-                                        <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                                        </svg>
-                                    </button>
-                                </div>`
-                    }
-                }],
-                searching: true
-            });  
-        }
-        debugger;
         let total_price = 0;
         for(let [key,value] of user_cart)
         {
             total_price += await getProductPrice_PHP(key) * value;
         }
-        let price_str = "Subtotal: " + "<p class = \"text-blue-800\">$" + total_price+ "</p>" +"<p class = \"text-lg mt-4\">Enter your address below to proceed</p>";
+        let price_str = "Subtotal: " + "<p class = \"text-blue-800\">$" + total_price+ "</p>";
         $('#total-price').html(price_str);
     }
 }
@@ -423,24 +357,107 @@ async function update_page_UI()
 async function update_table_data()
 {
     table_data = [];
+    let to_replace = `
+        <div class = "cart-table-entry-titles">
+            <div class="cart-table-entry-title">
+                Product name
+            </div>
+            <div class="cart-table-entry-price ">
+                <p style="color: black;">Price</p>
+            </div>
+            <div class="cart-table-entry-actions">
+                Actions
+            </div>
+        </div>`;
     for(let [key, value] of user_cart)
     {
         let prod_price = await getProductPrice_PHP(key);
         table_data.push([key, value, value * prod_price]);
+        let cartEntry = `
+        <div class="cart-table-entry">
+            <div class="cart-table-entry-title">
+                ${get_title_from_slug(key)}
+            </div>
+            <div class="cart-table-entry-price">
+                ${value * prod_price}$
+            </div>
+            <div class="cart-table-entry-actions" id = '${key}_actions'>
+                <button class="delete-button" id = '${key}_delete'>
+                        <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                        </svg>
+                </button>
+                <button class ="edit-button" id = '${key}_delete'>
+                <svg class="w-6 h-6 text-white aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd" d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z" clip-rule="evenodd"/>
+                </svg>
+                </button>
+            </div>
+        </div>
+        `;
+        to_replace += cartEntry;
     }
-    if(table)
-        table.ajax.reload();
+    $('.cart-table-container').html(to_replace);
+    $('.delete-button').click(async (e)=>{
+        let slug = get_slug(e.currentTarget.id);
+        await removeFromCartAll(slug);
+    });
+    $('.edit-button').click((e)=>{
+        debugger;
+        let slug = get_slug(e.currentTarget.id);
+        window.location.href = baseUrl + "/" + slug;
+    });
 }
+
 function get_slug(id)
 {
     return id.split('_')[0];
 }
-
-
+function get_title_from_slug(slug)
+{
+        let title = slug.replace(/-/g, ' ');
+        title = title.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        return title;
+}
+function handleCartPageResponsiveness()
+{
+    $('.cart-user-actions-container').css('min-width',$('.cart-user-actions-container').outerWidth(true));
+    function handleCartContainer(){
+        let min_width = 510;
+        let user_actions_min_width = $('.cart-user-actions-container').outerWidth(true);
+        debugger;
+        if((($('.cart-page-container').width()-user_actions_min_width) < min_width) && page_vertical == false)
+        {
+            $('.cart-page-container').addClass('vertical');
+            $('.cart-user-actions-container').addClass('vertical');
+            $('.cart-table-container').addClass('vertical');
+            page_vertical = true;
+        }
+        else
+        {
+            $('.cart-page-container').removeClass('vertical');
+            $('.cart-user-actions-container').removeClass('vertical');
+            $('cart-table-container').removeClass('vertical');
+            page_vertical = false;
+        }
+    }
+    const debounce_handleCart = debounce(handleCartContainer,200);
+    debounce_handleCart();
+    $(window).resize(debounce_handleCart);
+    var userActionsHeight = $('.cart-user-actions-container').outerHeight();
+    $('.cart-table-container').css('height', userActionsHeight);
+}
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
 
 
 update_page_UI();
-$('#cart-table').on('draw.dt', function() {
-    setEventHandlers();
-});
+handleCartPageResponsiveness();
+setEventHandlers();
 });

@@ -20,12 +20,12 @@ function range() {
       maxthumb: 0,
       mintrigger() {
         this.validation();
-        this.minprice = Math.min(this.minprice, this.maxprice - 500);
+        this.minprice = Math.min(this.minprice, this.maxprice);
         this.minthumb = ((this.minprice - this.min) / (this.max - this.min)) * 100;
       },
       maxtrigger() {
         this.validation();
-        this.maxprice = Math.max(this.maxprice, this.minprice + 200);
+        this.maxprice = Math.max(this.maxprice, this.minprice);
         this.maxthumb = 100 - (((this.maxprice - this.min) / (this.max - this.min)) * 100);
       },
       validation() {
@@ -86,10 +86,6 @@ jQuery(document).ready(function($){
     let maxwidth = screen.width;
     function handleResponsiveness(){
         let min_width = 2*$('.product-card').first().outerWidth(true) + $('.categories-container').outerWidth(true) +2*parseInt($('.products-container').css('padding-left'));
-        if($(window).width() <= min_width)
-            $('.categories-container').hide();
-        else
-            $('.categories-container').show();
 
         if($(window).width() < min_width *1.333)
         {
@@ -141,8 +137,8 @@ jQuery(document).ready(function($){
     }
     function maintainValidPriceRange(){
         $('#max-price-filter').attr('max', 10000);
-        $('#max-price-filter').attr('min', $('#price-input-low').attr('min'));
-        $('#min-price-filter').attr('max', $('price-input-high').attr('max'));
+        $('#max-price-filter').attr('min', $('#price-input-low').val());
+        $('#min-price-filter').attr('max', $('price-input-high').val());
         $('#min-price-filter').attr('min',0);
     }
     $('#min-price-filter').on('input', ()=>{

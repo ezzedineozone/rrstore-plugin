@@ -1,0 +1,212 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.logo-container {
+    @apply object-contain h-full w-auto cursor-pointer flex items-center;
+}
+
+.header {
+    @apply flex  flex-row justify-between bg-yellow-custom w-full h-20 px-2 py-2 items-center;
+}
+.navigation-container{
+    @apply flex flex-row items-center space-x-6;
+}
+.custom-navigation-container{
+    @apply flex flex-row items-center space-x-2;
+}
+.navigation {
+    @apply flex space-x-4;
+}
+
+.navigation-item {
+    @apply font-semibold text-black text-base hover:text-white transition-colors duration-150;
+}
+
+.product-card{
+    @apply border-black border min-w-48 m-2 max-w-48 h-max flex flex-col px-2 py-1 rounded-lg items-center hover:scale-105 transition-all;
+}
+.product-card-image-container{
+    @apply w-full mt-4 mb-4 h-full flex justify-center;
+}
+.product-card-image{
+    @apply  h-32 w-auto object-cover;
+}
+.product-card-details{
+    @apply flex flex-col w-full items-center;
+}
+.product-card-title{
+    @apply text-black font-bold text-lg;
+}
+.product-card-price-container{
+    @apply flex flex-row justify-center items-center w-full h-auto;
+}
+
+.product-card-price{
+    @apply text-black font-bold text-base;
+}
+.product-card-actions-container{
+    @apply flex-row flex space-x-2 w-full h-8 items-center justify-center my-4;
+}
+.product-card-actions-number{
+    @apply border-blue-800 border-2 w-1/2 h-full;
+}
+.product-card-description{
+    @apply text-black text-sm;
+}
+.products-page-container{
+    @apply flex flex-col w-full h-max min-h-screen overflow-y-auto relative;
+}
+.products-page-actions{
+    @apply flex flex-row items-center justify-start w-full h-max;
+}
+.products-container{
+    @apply flex flex-row flex-wrap overflow-x-auto overflow-y-hidden min-w-52 h-max min-h-screen mt-4;
+}
+.products-page-title{
+    @apply text-2xl font-bold h-auto w-screen flex flex-row justify-center items-center;
+}
+.categories-container{
+    @apply min-w-72 max-w-72 h-auto bg-yellow-200 rounded-b-lg rounded-r-md absolute top-0 -translate-x-full transition-transform duration-200;
+}
+.categories-container.show{
+    @apply translate-x-0;
+}
+.gray-effect{
+    opacity: 0.8;
+    background-color: rgba(31, 31, 31, 0.422);
+}
+.disabled{
+    pointer-events: none;
+}
+.categories-container-content{
+    @apply border-blue-800 rounded-b-lg p-4 h-max flex flex-col space-y-2;
+}
+.categories-container-control{
+    @apply flex flex-row justify-end pr-4;
+}
+.categories-container-title{
+    @apply  font-bold text-black text-lg;
+}
+
+.price-picker{
+    @apply flex flex-col space-x-0 space-y-2;
+}
+.categories-picker-checkboxes{
+    @apply flex flex-col space-y-2 w-full h-max;
+}
+.checkbox{
+    @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600;
+}
+
+.product-card-actions-cart{
+    @apply w-1/4 h-full p-1 bg-yellow-custom rounded-sm text-white flex items-center justify-center cursor-pointer;
+}
+.product-card-actions-cart-header{
+    @apply w-auto h-auto p-1 bg-yellow-400 rounded-sm text-white flex items-center justify-center;
+}
+.product-card-actions-details{
+    @apply w-1/2 border-blue-800 border-2 h-full p-1 bg-blue-800 rounded-sm text-white flex items-center justify-center cursor-pointer;
+}
+.product-card-actions-number{
+    @apply w-1/2 h-auto p-1 bg-white rounded-sm text-black;
+}
+.cart-page-container{
+    @apply flex flex-row h-full w-full p-4 space-x-2 items-stretch;
+}
+.cart-page-container.vertical{
+    @apply  flex-col-reverse space-y-4 space-x-0 h-max;
+}
+.table-container{
+    @apply bg-yellow-200 border-yellow-custom border-2 w-fit h-full;
+}
+.cart-user-actions-container{
+    @apply border-blue-800 mt-4 border-2 min-w-96 w-96 p-4 flex flex-col h-max justify-start rounded-lg space-y-6;
+}
+.cart-user-actions-container.vertical{
+    @apply w-full;
+}
+.cart-user-actions-title{
+    @apply text-2xl text-black font-bold;
+}
+.cart-user-actions-details{
+    @apply text-base text-black;
+}
+.cart-user-actions-buttons-container{
+    @apply w-full h-max p-4 flex flex-row space-x-4 items-center justify-center;
+}
+.cart-user-actions-checkout{
+    @apply bg-blue-800 text-white rounded-sm p-2;
+}
+.cart-user-actions-save-address{
+    @apply bg-yellow-custom text-white rounded-sm p-2;
+}
+.cart-table-container{
+    @apply flex-col w-1/2 mt-4 bg-yellow-200 border-yellow-400 border-2 h-auto flex-grow;
+}
+.cart-table-container.vertical{
+    @apply w-full;
+}
+.cart-table-entry-titles{
+    @apply border-b-2 bg-yellow-400 border-yellow-400 p-2 w-full flex flex-row font-bold text-lg text-black;
+}
+.cart-table-entry{
+    @apply border-b-2 border-yellow-300 p-2 w-full flex flex-row justify-start items-center;
+}
+.cart-table-entry-title{
+    @apply w-1/2 flex-shrink justify-center;
+}
+.cart-table-entry-price{
+    @apply w-1/6 flex-shrink-0 justify-center text-blue-800 font-bold;
+}
+.cart-table-entry-actions{
+    @apply w-2/6 flex flex-row space-x-2 flex-shrink-0;
+}
+.edit-button{
+    @apply bg-blue-800 text-white rounded-sm p-2 cursor-pointer;
+}
+.delete-button{
+    @apply   p-2 bg-red-600 rounded-md w-max h-max text-white cursor-pointer;
+}
+.cart-item-actions{
+    @apply flex flex-row items-center justify-start space-x-2;
+}
+.product-page-container{
+    @apply flex flex-row w-full h-full p-20;
+}
+.product-page-image-container{
+    @apply w-1/2 h-screen flex items-center justify-center;
+}
+.product-page-image{
+    @apply w-full h-full object-contain;
+}
+.product-page-info-container{
+    @apply w-1/2 h-max rounded-lg p-5  flex flex-col space-y-2;
+}
+.product-page-product-title{
+    @apply text-2xl font-bold text-black w-full h-auto;
+}
+.product-page-product-description{
+    @apply text-base text-black w-full h-full h-auto mb-6;
+}
+.product-page-actions-container{
+    @apply w-full h-max flex flex-row space-x-2 mt-4;
+}
+.product-page-actions-cart{
+    @apply bg-yellow-custom px-3 py-2 rounded-md text-white;
+}
+.product-page-actions-input{
+    @apply p-2 rounded-md w-32 border-blue-800 border-2;
+}
+.product-page-product-price-container{
+    @apply w-full h-auto;
+}
+.product-page-product-price{
+    @apply text-blue-800 font-bold text-lg w-full h-auto;
+}
+.body{
+    @apply h-screen w-screen;
+}
+
+
+

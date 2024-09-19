@@ -10,7 +10,7 @@ if (have_posts()) :
                 $img = wp_get_attachment_url($img_id);
                 if(!$img):
                 ?>
-                <img class = "product-page-image" src="<?php echo site_url() ?>/wp-content/plugins/rrstore-plugin/images/sample-product.png" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
+                <img class = "product-page-image" src="<?php echo site_url() ?>/wp-content/plugins/rrstore-plugin/rrstore-plugin/images/sample-product.png" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
                 <?php
                 else :
                 ?>

@@ -1,7 +1,7 @@
 <?php
 
 /*
-* Plugin Name: rrstore-product
+* Plugin Name: rrstore-plugin
 * Plugin URI: <?php echo esc_url(get_site_url(null, 'products')); ?>
 * Description: products for rrstore
 * Author: Ezzedine Al Ozon
@@ -83,6 +83,25 @@ function save_product_price($post_id)
         update_post_meta($post_id, 'product_price', $image_id);
     }
 }
+function get_product_price() {
+    if (isset($_GET['slug'])) {
+        $slug = sanitize_text_field($_GET['slug']);
+        $post = get_page_by_path($slug, OBJECT, 'products');
+
+        if ($post) {
+            $price = get_post_meta($post->ID, 'product_price', true);
+            if ($price !== '') {
+                wp_send_json_success($price);
+            } else {
+                wp_send_json_error('Product price not found');
+            }
+        } else {
+            wp_send_json_error('Product not found');
+        }
+    } else {
+        wp_send_json_error('Slug not provided');
+    }
+}
 function filter_product_by_price($query){
     if(!is_admin() && $query->is_main_query() && (is_post_type_archive('products') || is_category()))
     {
@@ -142,48 +161,86 @@ function save_product_image($post_id){
     }
 }
 function register_templates($template){
+    $plugin_path = plugin_dir_path(__FILE__);
+    $plugin_path = str_replace('\\', '/', $plugin_path); 
     if(is_singular('products'))
     {
-        $custom_template = plugin_dir_path(__FILE__) . 'rrstore-plugin/templates/single-product.php';
+        $custom_template = $plugin_path . 'rrstore-plugin/templates/single-product.php';
         if(file_exists($custom_template))
             return $custom_template;
     }
     else if(is_post_type_archive('products'))
     {
-        $custom_template = plugin_dir_path(__FILE__) . 'rrstore-plugin/templates/archive-product.php';
+        $custom_template = $plugin_path . 'rrstore-plugin/templates/archive-product.php';
         if(file_exists($custom_template))
             return $custom_template; 
     }
     else if(is_category())
     {
-        $custom_template = plugin_dir_path(__FILE__) . 'rrstore-plugin/templates/category.php';
+        $custom_template = $plugin_path . 'rrstore-plugin/templates/category.php';
         if(file_exists($custom_template))
             return $custom_template;
     }
-
+    else if (is_page('cart'))
+    {
+        $custom_template = $plugin_path . 'rrstore-plugin/templates/cart-page.php';
+        if(file_exists($custom_template))
+            return $custom_template;
+    }
     return $template;
 }
+add_filter('template_include', 'register_templates');
 function get_product_archive_template()
 {
     return plugin_dir_path(__FILE__) . "rrstore-plugin/templates/archive-product.php";
 }
 function product_plugin_active(){
-    $plugin_file = 'rrstore-product.php';
+    $plugin_file = 'rrstore-plugin.php';
     $active_plugins = get_option('active_plugins');
     return in_array($plugin_file, $active_plugins);
 }
-function rrstore_product_script(){
+function rrstore_plugin_script(){
+    wp_enqueue_script('main-js_rrstore', plugin_dir_url(__FILE__).'/rrstore-plugin/main.js', array('jquery'), '0.1.0', true);
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('flowbite-js', 'https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js', array('jquery'), '2.5.1', true);
+    wp_enqueue_script('alpine-js', 'https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/alpine.min.js',array(),null, true);
     if(is_page('cart') || is_post_type_archive('products') || is_category()):
-        wp_enqueue_script('product-js', plugin_dir_url(__FILE__) . '/rrstore-plugin/products.js', array('jquery'), null , true);
-        wp_enqueue_script('cart-js', plugin_dir_url(__FILE__) . '/rrstore-plugin/cart.js', array('jquery', 'product-js'), null, true);
-        wp_enqueue_script('alpine-js', 'https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/alpine.min.js',array(),null, true);
-        wp_localize_script('cart-js', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+        wp_enqueue_script('product-js_rrstore', plugin_dir_url(__FILE__) . '/rrstore-plugin/products.js', array('jquery'), null , true);
+        wp_enqueue_script('cart-js_rrstore', plugin_dir_url(__FILE__) . '/rrstore-plugin/cart.js', array('jquery', 'product-js_rrstore'), null, true);
+        wp_localize_script('cart-js_rrstore', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
     endif;
+    wp_localize_script('main-js_rrstore', 'wpData', array(
+        'baseUrl' => get_site_url()
+    ));
+}
+function start_session(){
+    if(!session_id())
+        session_start();
+}
+function rrstore_plugin_style(){
+    wp_enqueue_style('flowbite-css', 'https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css', array(), '2.5.1');
+    wp_enqueue_style('main-style', plugin_dir_url(__FILE__)."/rrstore-plugin/css/main-style.css", array(), '0.1.0');
 }
 function rrstore_admin_scripts(){
     wp_enqueue_script('admin-product-js', plugin_dir_url(__FILE__) . '/rrstore-plugin/image-library.js', array(), null, true);
 }
-
+function create_required_pages(){
+    $page_titles = array('cart', 'products');
+    foreach($page_titles as $title)
+    {
+        $query = new WP_QUERY(array(
+            'post_type' => 'page',
+            'title' => $title,
+            'post_status' => 'publish'
+        ));
+        if(!$query->have_posts())
+        {
+            $new_page = array('post_type' => 'page', 'post_title' =>$title,'post_status' => 'publish');
+            $page_id = wp_insert_post($new_page);
+        }
+    }
+}
+register_activation_hook(__FILE__, 'create_required_pages');
 
 
 // below functions are for the Cart communication from javscript with PHP session cookie
@@ -308,38 +365,22 @@ function get_item_qty($slug)
     return wp_send_json_error();
 }
 
-function get_product_price() {
-    if (isset($_GET['slug'])) {
-        $slug = sanitize_text_field($_GET['slug']);
-        $post = get_page_by_path($slug, OBJECT, 'products');
 
-        if ($post) {
-            $price = get_post_meta($post->ID, 'product_price', true);
-            if ($price !== '') {
-                wp_send_json_success($price);
-            } else {
-                wp_send_json_error('Product price not found');
-            }
-        } else {
-            wp_send_json_error('Product not found');
-        }
-    } else {
-        wp_send_json_error('Slug not provided');
-    }
-}
+
+
 add_action('wp_ajax_get_product_price', 'get_product_price');
 add_action('wp_ajax_noprive_get_product_price', 'get_product_price');
 
 
-
+register_activation_hook(__FILE__, 'product_plugin_activate');
 add_action('wp_ajax_get_item_qty_cart', 'get_item_qty');
 add_action('wp_ajax_nopriv_get_item_qty_cart', 'get_item_qty');
 add_action('admin_enqueue_scripts', 'rrstore_admin_scripts');
 
-register_activation_hook(__FILE__, 'product_plugin_activate');
 add_action('init', 'rrstore_product');
-add_filter('template_include', 'register_templates');
-add_action('wp_enqueue_scripts', 'rrstore_product_script');
+add_action('init', 'start_session');
+add_action('wp_enqueue_scripts', 'rrstore_plugin_script');
+add_action('wp_enqueue_scripts', 'rrstore_plugin_style');
 add_action('add_meta_boxes', 'add_product_price');
 add_action('save_post', 'save_product_price');
 add_action('add_meta_boxes', 'add_image_meta_box');
