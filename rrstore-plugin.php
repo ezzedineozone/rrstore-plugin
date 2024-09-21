@@ -15,7 +15,6 @@ function product_plugin_activate(){
         'publish_posts'=> true
     ));
     update_option('permalink_structure', '/%postname%/');
-    flush_rewrite_rules();
 }
 
 function rrstore_product(){
@@ -55,6 +54,7 @@ function rrstore_product(){
         'taxonomies' => array('category')
     );
     register_post_type('products', $args);
+    flush_rewrite_rules();
 }
 
 function add_product_price()
