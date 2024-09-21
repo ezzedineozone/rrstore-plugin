@@ -192,12 +192,12 @@ async function updateUserCart()
 function setEventHandlers()
 {
     console.log("running");
-    if($('.products-container').length > 0)
+    if($('.rrstore-products-container').length > 0)
         {
-            $('.product-card-actions-details').on('click', (e)=>{
+            $('.rrstore-product-card-actions-details').on('click', (e)=>{
                 showProductInfo(e);
               });
-            $('.product-card-actions-cart').click(async (e) => {
+            $('.rrstore-product-card-actions-cart').click(async (e) => {
                 let slug  = get_slug(e.currentTarget.id);
                 let info_btn_id = '#' + slug + '_info';
                 let old_qty = getItemQty(slug);
@@ -253,7 +253,7 @@ function setEventHandlers()
                 let cart_button_id = '#' + slug + '_cart';
                 let old_html_cart = $(cart_button_id).clone(true);
                 $(cart_button_id).replaceWith(`
-                    <button class = "delete-button" id = \'${cart_button_id.substring(1,cart_button_id.length)}\'>
+                    <button class = "rrstore-delete-button" id = \'${cart_button_id.substring(1,cart_button_id.length)}\'>
                         <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                         </svg>
@@ -269,9 +269,9 @@ function setEventHandlers()
         else if(window.location.href === cartUrl)
         {
         }
-        else if($('.product-container'))
+        else if($('.rrstore-product-container'))
         {
-            $('.product-page-actions-cart').on('click', async (e)=>{
+            $('.rrstore-product-page-actions-cart').on('click', async (e)=>{
                 let slug  = get_slug(e.currentTarget.id);
                 let info_btn_id = '#' + slug + '_info';
                 let old_qty = getItemQty(slug);
@@ -327,7 +327,7 @@ function setEventHandlers()
                 let cart_button_id = '#' + slug + '_cart';
                 let old_html_cart = $(cart_button_id).clone(true);
                 $(cart_button_id).replaceWith(`
-                    <button class = "delete-button" id = \'${cart_button_id.substring(1,cart_button_id.length)}\'>
+                    <button class = "rrstore-delete-button" id = \'${cart_button_id.substring(1,cart_button_id.length)}\'>
                         <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                         </svg>
@@ -400,7 +400,7 @@ async function update_page_UI()
             let cart_button_id = '#' + slug + '_cart';
             let old_html_cart = $(cart_button_id).clone(true);
             $(cart_button_id).replaceWith(`
-                <button class = "delete-button" id = "${cart_button_id.substring(1,cart_button_id.length)}">
+                <button class = "rrstore-delete-button" id = "${cart_button_id.substring(1,cart_button_id.length)}">
                     <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                     </svg>
@@ -432,14 +432,14 @@ async function update_table_data()
 {
     table_data = [];
     let to_replace = `
-        <div class = "cart-table-entry-titles">
-            <div class="cart-table-entry-title">
+        <div class = "rrstore-cart-table-entry-titles">
+            <div class="rrstore-cart-table-entry-title">
                 Product name
             </div>
-            <div class="cart-table-entry-price ">
+            <div class="rrstore-cart-table-entry-price ">
                 <p style="color: black;">Price</p>
             </div>
-            <div class="cart-table-entry-actions">
+            <div class="rrstore-cart-table-entry-actions">
                 Actions
             </div>
         </div>`;
@@ -448,20 +448,20 @@ async function update_table_data()
         let prod_price = await getProductPrice_PHP(key);
         table_data.push([key, value, value * prod_price]);
         let cartEntry = `
-        <div class="cart-table-entry">
-            <div class="cart-table-entry-title">
+        <div class="rrstore-cart-table-entry">
+            <div class="rrstore-cart-table-entry-title">
                 ${get_title_from_slug(key)}
             </div>
-            <div class="cart-table-entry-price">
+            <div class="rrstore-cart-table-entry-price">
                 ${value * prod_price}$
             </div>
-            <div class="cart-table-entry-actions" id = '${key}_actions'>
-                <button class="delete-button" id = '${key}_delete'>
+            <div class="rrstore-cart-table-entry-actions" id = '${key}_actions'>
+                <button class="rrstore-delete-button" id = '${key}_delete'>
                         <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                         </svg>
                 </button>
-                <button class ="edit-button" id = '${key}_delete'>
+                <button class ="rrstore-edit-button" id = '${key}_delete'>
                 <svg class="w-6 h-6 text-white aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd" d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z" clip-rule="evenodd"/>
                 <path fill-rule="evenodd" d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z" clip-rule="evenodd"/>
@@ -472,12 +472,12 @@ async function update_table_data()
         `;
         to_replace += cartEntry;
     }
-    $('.cart-table-container').html(to_replace);
-    $('.delete-button').click(async (e)=>{
+    $('.rrstore-cart-table-container').html(to_replace);
+    $('.rrstore-delete-button').click(async (e)=>{
         let slug = get_slug(e.currentTarget.id);
         await removeFromCartAll(slug);
     });
-    $('.edit-button').click((e)=>{
+    $('.rrstore-edit-button').click((e)=>{
         let slug = get_slug(e.currentTarget.id);
         window.location.href = baseUrl + "/" + slug;
     });
@@ -495,30 +495,30 @@ function get_title_from_slug(slug)
 }
 function handleCartPageResponsiveness()
 {
-    $('.cart-user-actions-container').css('min-width',$('.cart-user-actions-container').outerWidth(true));
+    $('.rrstore-cart-user-actions-container').css('min-width',$('.rrstore-cart-user-actions-container').outerWidth(true));
     function handleCartContainer(){
         let min_width = 510;
-        let user_actions_min_width = $('.cart-user-actions-container').outerWidth(true);
-        if((($('.cart-page-container').width()-user_actions_min_width) < min_width) && page_vertical == false)
+        let user_actions_min_width = $('.rrstore-cart-user-actions-container').outerWidth(true);
+        if((($('.rrstore-cart-page-container').width()-user_actions_min_width) < min_width) && page_vertical == false)
         {
-            $('.cart-page-container').addClass('vertical');
-            $('.cart-user-actions-container').addClass('vertical');
-            $('.cart-table-container').addClass('vertical');
+            $('.rrstore-cart-page-container').addClass('vertical');
+            $('.rrstore-cart-user-actions-container').addClass('vertical');
+            $('.rrstore-cart-table-container').addClass('vertical');
             page_vertical = true;
         }
         else
         {
-            $('.cart-page-container').removeClass('vertical');
-            $('.cart-user-actions-container').removeClass('vertical');
-            $('cart-table-container').removeClass('vertical');
+            $('.rrstore-cart-page-container').removeClass('vertical');
+            $('.rrstore-cart-user-actions-container').removeClass('vertical');
+            $('.rrstore-cart-table-container').removeClass('vertical');
             page_vertical = false;
         }
     }
     const debounce_handleCart = debounce(handleCartContainer,200);
     debounce_handleCart();
     $(window).resize(debounce_handleCart);
-    var userActionsHeight = $('.cart-user-actions-container').outerHeight();
-    $('.cart-table-container').css('height', userActionsHeight);
+    var userActionsHeight = $('.rrstore-cart-user-actions-container').outerHeight();
+    $('.rrstore-cart-table-container').css('height', userActionsHeight);
 }
 function debounce(func, wait) {
     let timeout;

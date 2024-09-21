@@ -5,18 +5,18 @@
  */
 get_header();
 ?>
-<div class='cart-page-container'>
-    <div class = "cart-table-container">
+<div class='rrstore-cart-page-container'>
+    <div class = "rrstore-cart-table-container">
     
     </div>
-    <div class='cart-user-actions-container'>
-        <h1 class="cart-user-actions-title">Checkout</h1>
+    <div class='rrstore-cart-user-actions-container'>
+        <h1 class="rrstore-cart-user-actions-title">Checkout</h1>
         <p class="text-xl font-bold" id="total-price">
             Subtotal:
             <br>
             <span class="text-blue-800">$0</span>
         </p>
-        <h1 class="cart-user-actions-title">Address</h1>
+        <h1 class="rrstore-cart-user-actions-title">Address</h1>
         <div class="flex flex-col w-full h-max mb-3 space-y-4">
             <div class="flex flex-row w-full h-max space-x-2 items-center justify-center">
                 <div class="flex flex-col w-1/2 items-center justify-center">
@@ -47,11 +47,11 @@ get_header();
                 <input type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
             </div>
         </div>
-        <div class="cart-user-actions-buttons-container">
-            <button class="cart-user-actions-checkout">
+        <div class="rrstore-cart-user-actions-buttons-container">
+            <button class="rrstore-cart-user-actions-checkout">
                 Checkout
             </button>
-            <button class="cart-user-actions-save-address">
+            <button class="rrstore-cart-user-actions-save-address">
                 Save Address
             </button>
         </div>
