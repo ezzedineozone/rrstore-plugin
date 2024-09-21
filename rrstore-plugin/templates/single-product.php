@@ -10,12 +10,13 @@ if (have_posts()) :
                 $img = wp_get_attachment_url($img_id);
                 if(!$img):
                 ?>
-                <img class = "product-page-image" src="<?php echo site_url() ?>/wp-content/plugins/rrstore-plugin/rrstore-plugin/images/sample-product.png" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
+                <img class = "product-page-image" src="<?php echo site_url() ?>/wp-content/plugins/rrstore plugin/rrstore-plugin/images/sample-product.png" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
                 <?php
                 else :
                 ?>
                 <img class = "product-page-image" src = "<?php echo $img ?>" />
                 <?php endif;
+                $post_slug = get_post_field('post_name', get_the_ID());
             ?>
         </div> 
         <div class = "product-page-info-container">
@@ -29,8 +30,8 @@ if (have_posts()) :
                 <?php the_content()?>
             </div>
             <div class = "product-page-actions-container">
-                <input class = "product-page-actions-input" type = "number" value = "1" min = "0" max = "99" />
-                <button class = "product-page-actions-cart">
+                <button class = "product-page-actions-info" hidden id="<?php echo $post_slug . '_info'; ?>"> Info</button>
+                <button class = "product-page-actions-cart" id="<?php echo $post_slug . '_cart'; ?>">
                     Add To Cart
                 </button>
             </div>

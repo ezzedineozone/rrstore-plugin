@@ -3,7 +3,8 @@
 let selected_category_filter = "";
 function showProductInfo(e)
 {
-    let slug =  get_slug(e.id);
+    debugger;
+    let slug =  get_slug(e.currentTarget.id);
     window.location.href = baseUrl + "/" + slug;
 };
 function get_slug(id)
@@ -133,6 +134,9 @@ jQuery(document).ready(function($){
         $('#filter-reset-button').click(()=>
         {
             window.location.href = productsUrl;
+        });
+        $('.product-card-details').on('click',(e)=>{
+          showProductInfo(e);
         });
     }
     function maintainValidPriceRange(){
