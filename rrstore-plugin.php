@@ -61,7 +61,13 @@ function rrstore_product(){
     register_post_type('products', $args);
     flush_rewrite_rules();
 }
-
+function add_custom_menu_item($items, $args) {
+    if ($args->theme_location == 'primary') {
+        $items .= '<li class="menu-item"><a href="' . home_url(). '/products' . '">Store</a></li>';
+    }
+    return $items;
+}
+add_filter('wp_nav_menu_items', 'add_custom_menu_item', 10, 2);
 function add_product_price()
 {
     add_meta_box(

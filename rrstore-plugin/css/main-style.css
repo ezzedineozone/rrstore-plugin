@@ -1088,6 +1088,9 @@ video {
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 200ms;
+  /* Tailwind classes */
+  pointer-events: none;
+  /* Prevent mouse events when hidden */
 }
 
 .navigation > li > ul > li > a {

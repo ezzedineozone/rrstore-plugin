@@ -8,13 +8,14 @@ if (have_posts()) :
             <?php
                 $img_id = get_post_meta(get_the_ID(), '_my_image_attachment_id', true);
                 $img = wp_get_attachment_url($img_id);
+                $slug = get_post_field('post_name', get_the_ID());
                 if(!$img):
                 ?>
-                <img class = "rrstore-product-page-image" src="<?php echo site_url() ?>/wp-content/plugins/rrstore plugin/rrstore-plugin/images/sample-product.png" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
+                <img class = "rrstore-product-page-image" id = "<?php echo $slug ;?>_img" src="<?php echo site_url() ?>/wp-content/plugins/rrstore plugin/rrstore-plugin/images/sample-product.png" class = "product-card-image" id = "<?php echo $post_slug . '_img'; ?>" />
                 <?php
                 else :
                 ?>
-                <img class = "rrstore-product-page-image" src = "<?php echo $img ?>" />
+                <img class = "rrstore-product-page-image" id = "<?php echo $slug ;?>_img" src = "<?php echo $img ?>" />
                 <?php endif;
                 $post_slug = get_post_field('post_name', get_the_ID());
             ?>
