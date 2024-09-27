@@ -7,7 +7,6 @@ rrstore_plugin_header();
 ?>
 <div class='rrstore-cart-page-container'>
     <div class = "rrstore-cart-table-container">
-    
     </div>
     <div class='rrstore-cart-user-actions-container'>
         <h1 class="rrstore-cart-user-actions-title">Checkout</h1>
@@ -57,4 +56,4 @@ rrstore_plugin_header();
         </div>
     </div>
 </div>
-<?php get_footer(); ?>
+<?php rrstore_plugin_footer();?>

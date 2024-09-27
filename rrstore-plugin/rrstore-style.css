@@ -1,6 +1,84 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.logo-container {
+    @apply object-contain h-full w-auto cursor-pointer flex items-center;
+}
+
+.header {
+    @apply flex  flex-row justify-between bg-yellow-custom w-full h-20 px-2 py-2 items-center;
+}
+.navigation-container{
+    @apply flex flex-row items-center space-x-6;
+}
+.custom-navigation-container{
+    @apply flex flex-row items-center space-x-2;
+}
+.navigation {
+    @apply flex space-x-4;
+}
+.navigation > li> a {
+    @apply text-black transition-colors duration-200 font-bold pb-6;
+}
+.navigation > li.menu-item-has-children > a::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent; /* Adjust the size and color */
+    border-right: 5px solid transparent; /* Adjust the size and color */
+    border-top: 5px solid black; /* Change this to the color of the arrow */
+    margin-left: 5px; /* Spacing between text and arrow */
+    vertical-align: middle; /* Align the arrow vertically */
+}
+
+.navigation > li > a:hover{
+    @apply text-white;
+}
+.navigation > li > ul {
+    display: none;
+    position: absolute;
+    background-color: black;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    z-index: 999;
+    @apply transition-opacity duration-200 w-max rounded-md mt-4;
+}
+.navigation > li > ul > li > a{
+    @apply font-bold;
+}
+.navigation ul li {
+    width: 200px; /* Adjust width as needed */
+}
+
+/* Display the dropdown on hover */
+.navigation li:hover > ul {
+    display: block;
+}
+
+/* Adjust parent navigation styling */
+.navigation li {
+    position: relative;
+    display: inline-block;
+}
+
+/* Styling for submenu items */
+.navigation li ul li {
+    display: block;
+    width: 100%; /* Take up full width */
+}
+
+/* Add hover styles */
+.navigation li ul li a {
+    padding: 10px;
+    display: block;
+    color: white; /* Text color */
+    text-decoration: none;
+}
+.navigation-item {
+    @apply font-semibold text-black text-base hover:text-white transition-colors duration-150;
+}
 .rrstore-navigation-container{
     @apply flex flex-row items-center space-x-6;
 }
@@ -10,7 +88,6 @@
 .rrstore-navigation {
     @apply flex space-x-4;
 }
-
 .rrstore-navigation-item {
     @apply font-semibold text-black text-base hover:text-white transition-colors duration-150;
 }

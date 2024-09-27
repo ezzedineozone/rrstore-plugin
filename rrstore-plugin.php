@@ -117,6 +117,14 @@ function rrstore_plugin_header(){
         get_header();
     }
 }
+function rrstore_plugin_footer(){
+    $header = plugin_dir_path(__FILE__) . './rrstore-plugin/templates/custom_footer.php';
+    if (file_exists($header)) {
+        include($header);
+    } else {
+        get_footer();
+    }
+}
 function filter_product_by_price($query){
     if(!is_admin() && $query->is_main_query() && (is_post_type_archive('products') || is_category()))
     {
@@ -220,13 +228,7 @@ function wpse_340767_dequeue_theme_assets() {
         $wp_scripts = wp_scripts();
         $wp_styles  = wp_styles();
         $themes_uri = get_theme_root_uri();
-    
-        foreach ( $wp_scripts->registered as $wp_script ) {
-            if ( strpos( $wp_script->src, $themes_uri ) !== false ) {
-                var_dump('removed' . $wp_script->handle);
-                wp_deregister_script( $wp_script->handle );
-            }
-        }
+
         foreach ( $wp_styles->registered as $wp_style ) {
             if ( strpos( $wp_style->src, $themes_uri ) !== false ) {
                 wp_deregister_style( $wp_style->handle );

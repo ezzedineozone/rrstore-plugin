@@ -1,4 +1,4 @@
-<?php get_header(); ?>
+<?php rrstore_plugin_header(); ?>
 
 <?php
 if (have_posts()) :
@@ -43,4 +43,4 @@ else :
 endif;
 ?>
 
-<?php get_footer(); ?>
+<?php rrstore_plugin_footer(); ?>
