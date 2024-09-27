@@ -6,6 +6,7 @@ let page_vertical = false;
 //the cart from the session cookie
 console.log('cart-js loaded');
 jQuery(document).ready(function($){ 
+    console.log($);
 async function getCart_PHP() {
     return $.ajax({
         url: ajax_object.ajax_url,

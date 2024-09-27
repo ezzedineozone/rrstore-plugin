@@ -3,7 +3,7 @@
 /**
  * Template Name: Cart Page
  */
-get_header();
+rrstore_plugin_header();
 ?>
 <div class='rrstore-cart-page-container'>
     <div class = "rrstore-cart-table-container">

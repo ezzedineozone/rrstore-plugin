@@ -1,14 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.rrstore-logo-container {
-    @apply object-contain h-full w-auto cursor-pointer flex items-center;
-}
-
-.rrstore-header {
-    @apply flex  flex-row justify-between bg-yellow-custom w-full h-20 px-2 py-2 items-center;
-}
 .rrstore-navigation-container{
     @apply flex flex-row items-center space-x-6;
 }
@@ -22,9 +14,11 @@
 .rrstore-navigation-item {
     @apply font-semibold text-black text-base hover:text-white transition-colors duration-150;
 }
-
 .rrstore-product-card{
     @apply border-black border min-w-48 m-2 max-w-48 h-max flex flex-col px-2 py-1 rounded-lg items-center hover:scale-105 transition-all;
+}
+.ignore-css{
+    all: unset !important;
 }
 .rrstore-product-card-image-container{
     @apply w-full mt-4 mb-4 h-full flex justify-center;

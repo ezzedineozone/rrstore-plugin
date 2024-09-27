@@ -5,7 +5,7 @@
  */
 ?>
 
-<?php get_header() ?>
+<?php wp_head() ?>
 <div class="rrstore-products-page-container">
     <div class="rrstore-products-page-actions">
         <div class="flex flex-row justify-start w-max top-0 left-0 absolute">
