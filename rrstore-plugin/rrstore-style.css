@@ -31,7 +31,17 @@
     margin-left: 5px; /* Spacing between text and arrow */
     vertical-align: middle; /* Align the arrow vertically */
 }
-
+.mobile-navigation > ul > li.menu-item-has-children > a::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent; /* Adjust the size and color */
+    border-right: 5px solid transparent; /* Adjust the size and color */
+    border-top: 5px solid black; /* Change this to the color of the arrow */
+    margin-left: 5px; /* Spacing between text and arrow */
+    vertical-align: middle; /* Align the arrow vertically */
+}
 .navigation > li > a:hover{
     @apply text-white;
 }
@@ -75,6 +85,69 @@
     display: block;
     color: white; /* Text color */
     text-decoration: none;
+}
+
+/* Mobile Navigation Base */
+.mobile-navigation-container {
+    @apply bg-yellow-custom p-4 pr-4;
+    height:100vh;
+    width: 100vw;
+    position: fixed; /* Makes the modal fixed in place */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000; /* Ensures it's above other content */
+    overflow-y: auto; /* Allow scrolling within the modal itself if content is too long */
+}
+
+/* Menu styles */
+.mobile-navigation {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    @apply pl-2;
+}
+
+/* List items */
+.mobile-navigation > li {
+    @apply w-full h-max border-black border-b py-6;
+}
+
+/* Links */
+.mobile-navigation > li > a {
+    @apply text-3xl py-4 font-bold;
+}
+.mobile-navigation > li > ul > li {
+    @apply border-black border-b;
+}
+.mobile-navigation > li > ul > li > a{
+    @apply text-white font-bold py-1;
+}
+/* Sub-menus are hidden by default */
+.mobile-navigation ul.sub-menu {
+    display: none; /* Hidden by default */
+    padding-left: 1rem; /* Add indentation for sub-items */
+    margin-top: 0.5rem; /* Adjust vertical spacing */
+    gap: 0.5rem; /* Space between sub-items */
+}
+
+/* Customize icons for dropdowns */
+.menu-item-has-children .icon {
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+/* Adjust sub-menu links */
+.mobile-navigation ul.sub-menu > li > a {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+/* Display sub-menu when the parent is active (triggered by jQuery) */
+.menu-item-active > .sub-menu {
+    display: block;
 }
 .navigation-item {
     @apply font-semibold text-black text-base hover:text-white transition-colors duration-150;
