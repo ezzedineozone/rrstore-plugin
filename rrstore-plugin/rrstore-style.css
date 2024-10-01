@@ -149,6 +149,43 @@
 .menu-item-active > .sub-menu {
     display: block;
 }
+.swal-add-to-cart{
+    @apply fixed top-0 right-0 mt-4 mr-4 w-max h-max p-6;
+}
+.swal-add-to-cart-icon{
+    transform: scale(0.5);
+}
+.swal-add-to-cart-title{
+    @apply text-2xl font-bold text-black ;
+}
+.swal-remove-from-cart{
+    @apply fixed top-0 right-0 mt-4 mr-4 w-max h-max p-6;
+}
+.swal-remove-from-cart-icon{
+    transform: scale(0.5);
+}
+.swal-remove-from-cart-title{
+    @apply text-2xl font-bold text-red-500 ;
+}
+.loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto; /* Center the loader */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.swal-loading-modal {
+    backdrop-filter: none; /* Remove any backdrop effect */
+    box-shadow: none; /* Remove shadow */
+}
 .navigation-item {
     @apply font-semibold text-black text-base hover:text-white transition-colors duration-150;
 }

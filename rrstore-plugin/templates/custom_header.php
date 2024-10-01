@@ -9,7 +9,13 @@
 <body class = "body"> 
 <div class = "header">
     <img class = "logo-container" src="<?php echo plugin_dir_url(__FILE__); ?>../images/rr-logo.png"/>
-    <div id ="mobile-navigation-button-container" hidden>
+    <div id ="mobile-navigation-button-container" class = " flex flex-row space-x-4 w-full justify-end hidden">
+        <button class = "product-card-actions-cart-header" onClick="onCartButtonClicked()">
+                <svg class="w-8 h-8 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+                </svg>
+                <p class = "font-semibold" >Cart</p>
+        </button>
         <button class="rounded-md flex flex-col items-center  border-black border-1 mobile-navigation-button" id="mobile-navigation-button">
             <svg class="w-8 h-8 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5" />

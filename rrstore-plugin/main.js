@@ -23,11 +23,13 @@ jQuery(document).ready(($)=>{
             if($(window).width() < min_width_to_display_nav)
             {
                 $('.navigation-container').hide();
-                $('#mobile-navigation-button-container').show();
+                $('#mobile-navigation-button-container').addClass('flex');
+                $('#mobile-navigation-button-container').removeClass('hidden');
             }
             else
             {
-                $('#mobile-navigation-button-container').hide();
+                $('#mobile-navigation-button-container').removeClass('flex');
+                $('#mobile-navigation-button-container').addClass('hidden');
                 $('.navigation-container').show();
             }
         }

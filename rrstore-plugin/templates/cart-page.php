@@ -13,7 +13,7 @@ rrstore_plugin_header();
         <p class="text-xl font-bold" id="total-price">
             Subtotal:
             <br>
-            <span class="text-blue-800">$0</span>
+            <span class="text-blue-800" id = "total-price-num">$0</span>
         </p>
         <h1 class="rrstore-cart-user-actions-title">Address</h1>
         <div class="flex flex-col w-full h-max mb-3 space-y-4">
