@@ -29,20 +29,25 @@ rrstore_plugin_header();
             </div>
             <div class="flex flex-row w-full h-max space-x-2 items-center justify-center">
                 <div class="flex flex-col w-1/2 items-center justify-center">
-                    <label for="phonenuber" class="w-full text-sm">Phone:</label>
+                    <label for="country" class="w-full text-sm">Email:</label>
                     <input type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
                 </div>
                 <div class="flex flex-col w-1/2 items-center justify-center">
-                    <label for="email" class="w-full text-sm ">Email:</label>
-                    <input type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
+                    <label for="email" class="w-full text-sm ">Country:</label>
+                    <select id="country-select" class="w-full h-8 border-2 border-gray-200 rounded-md pl-2">
+                        <option value="" disabled selected class = "text-sm text-gray-300" >Select your country</option>
+                    </select>
                 </div>
             </div>
             <div class="flex flex-col w-full h-max">
-                <label for="adress2" class="w-1/2">Adress Line 1</label>
-                <input type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
+                <label for ="phone_num" class = "w-full h-max">Phone number</label>
+                <div class = "flex flex-row w-full h-max space-x-2">
+                    <input placeholder="961" type = "number" class ="w-1/4 h-8 border-2 border-gray-200 rounded-md"/>
+                    <input placeholder="70123456" type = "number" class ="w-3/4 h-8 border-2 border-gray-200 rounded-md"/>
+                </div>
             </div>
             <div class="flex flex-col w-full h-max">
-                <label for="adress2" class="w-1/2">Adress Line 2</label>
+                <label for="adress2" class="w-1/2">Adress Line</label>
                 <input type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
             </div>
         </div>
