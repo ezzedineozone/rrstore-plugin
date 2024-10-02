@@ -15,6 +15,7 @@ function product_plugin_activate(){
         'publish_posts'=> true
     ));
     update_option('permalink_structure', '/%postname%/');
+    flush_rewrite_rules();
 }
 // function twentytwenty_dequeue_styles() {
 // 	wp_dequeue_style( 'twentytwenty-style' );
@@ -430,21 +431,20 @@ function get_item_qty($slug)
     }
     return wp_send_json_error();
 }
-function get_product_price_slug() {
+function prdct_price() {
     if (isset($_GET['slug'])) {
         $slug = sanitize_text_field($_GET['slug']);
         $post = get_page_by_path($slug, OBJECT, 'products');
-        var_dump($slug . $post);
 
         if ($post) {
             $price = get_post_meta($post->ID, 'product_price', true);
             if ($price !== '') {
                 wp_send_json_success($price);
             } else {
-                wp_send_json_error('Product price not found');
+                wp_send_json_error('Product price not found for slug: ' . $slug);
             }
         } else {
-            wp_send_json_error('Product not found');
+            wp_send_json_error('Product not found for slug: ' . $slug);
         }
     } else {
         wp_send_json_error('Slug not provided');
@@ -452,8 +452,9 @@ function get_product_price_slug() {
 }
 
 
-add_action('wp_ajax_get_product_price_slug', 'get_product_price_slug');
-add_action('wp_ajax_noprive_get_product_price_slug', 'get_product_price_slug');
+
+add_action('wp_ajax_prdct_price', 'prdct_price');
+add_action('wp_ajax_nopriv_prdct_price', 'prdct_price');
 
 
 

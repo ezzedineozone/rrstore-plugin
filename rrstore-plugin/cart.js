@@ -66,7 +66,6 @@ async function removeFromCartSingle(slug) {
                     user_cart.delete(slug);
                 else
                     user_cart.set(slug, user_cart.get(slug) - 1);
-                update_page_UI();
             } else {
                 console.error('Error:', response.data);
             }
@@ -111,34 +110,6 @@ async function clearCart_PHP() {
     });
 }
 
-async function getItemQty_PHP(slug) // CURRENTLY BROKEN, FIX LATER
-{
-    try{
-        let response = await $.ajax({
-            url: ajax_object.ajax_url,
-            type: 'GET',
-            dataType: 'json',
-            data: {action: 'get_item_qty_cart',
-                slug: slug
-            }
-        })
-        if(response.success)
-        {
-            return response.data;
-        }
-        else 
-        {
-            console.error('Error:', response.data);
-            return null;
-        }
-    }
-    catch(error)
-    {
-        console.error(error);
-    }
-
-}
-
 async function getProductPrice_PHP(slug) {
     try {
         let response = await $.ajax({
@@ -146,7 +117,7 @@ async function getProductPrice_PHP(slug) {
             type: 'GET',
             dataType: 'json',
             data: {
-                action: 'get_product_price_slug',
+                action: 'prdct_price',
                 slug: slug
             }
         });
@@ -256,6 +227,7 @@ function setEventHandlers()
                     let currentValue = parseInt($(text_input_element_id).val(), 10);
                     if (!isNaN(currentValue) && currentValue > 1) {
                         swal_loading();
+                        debugger;
                         await removeFromCartSingle(slug);
                         $(text_input_element_id).val(currentValue - 1);
                         swal_loading();
@@ -301,7 +273,7 @@ function setEventHandlers()
         else if(window.location.href === cartUrl)
         {
             $('.rrstore-delete-button').click(async (e)=>{
-        
+                debugger;
                 let slug = get_slug(e.currentTarget.id);
                 await removeFromCartAll(slug);
                 await update_page_UI();
@@ -324,15 +296,15 @@ function setEventHandlers()
             });
             
             $('.decrement-qty').click(async (e) => {
-                
                 swal_loading();
+                debugger;
                 let slug = get_slug(e.currentTarget.id);
                 let text_input_element_id = '#' + slug + '_qty';
                 let currentValue = parseInt($(text_input_element_id).val(), 10);
                 if (!isNaN(currentValue) && currentValue > 1) {
                     await removeFromCartSingle(slug);
                     $(text_input_element_id).val(currentValue - 1);
-                    let new_total = parseFloat($('#total-price-num').text().replace(/[$,]/g, '').trim()) + parseFloat(await getProductPrice_PHP(slug));
+                    let new_total = parseFloat($('#total-price-num').text().replace(/[$,]/g, '').trim()) - parseFloat(await getProductPrice_PHP(slug));
                     let price_str = "Subtotal: " + "<p class = \"text-blue-800\" id = \"total-price-num\">$" + new_total + "</p>";
                     $('#total-price').html(price_str);
                     swal_loading();
@@ -545,6 +517,7 @@ async function update_page_UI()
         $('#total-price').html(price_str);
         swal_loading();
     }
+    setEventHandlers();
 }
 
 
@@ -564,8 +537,7 @@ async function update_table_data()
             </div>
         </div>`;
     for(let [key, value] of user_cart)
-    {
-        debugger;
+    {        
         let prod_price = await getProductPrice_PHP(key);
         table_data.push([key, value, value * prod_price]);
         let info_btn_id = '#'+key+'_info';
@@ -653,5 +625,4 @@ function debounce(func, wait) {
 
 await update_page_UI();
 handleCartPageResponsiveness();
-setEventHandlers();
 });
