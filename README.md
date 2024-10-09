@@ -16,6 +16,8 @@ This plugin allows you to easily:
 
 #### IMPORTANT: For now refer and use the plugin on rrstore-rrsite-compatible branch, master branch is still being worked on while work is mostly done on the independent plugin branch, that is with the plugin on that branch, on activation, you will immediately recieve all the features on your website without further modification on your end. and the plugin there runs in full isolation, independent from the main theme. and masters branch is currently outdated
 
+#### To change the logo and default pic for products without a picture, replace their respective images (png or jpeg) in rrstore-plugin/images
+
 ## showcase
 ![image](https://github.com/user-attachments/assets/831ced4d-be3f-44e7-a85d-70f867cdbd8d)
 ![image](https://github.com/user-attachments/assets/5e2fe06e-4fb8-4827-a60d-b6d65298f443)
