@@ -10,7 +10,7 @@ This plugin allows you to easily:
 - Cart functionality based on PHP cookies, no need for user logon
 - Filter Products based on categories and price
 - Checkout address and user info collection, with price calculation before extra charges such as vat or delivery
-- checkout functionality and extra charges are for you to implement, view cart.js and cart-page.php
+- Checkout functionality and extra charges are for you to implement, view cart.js and cart-page.php
 
 #### For now refer to the rrstore-rrsite-compatible branch, master branch is still being worked on while work is mostly done on the independent plugin branch, that is with the plugin on that branch, on activation, you will immediately recieve all the features on your website without further modification on your end.
 
