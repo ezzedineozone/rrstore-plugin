@@ -177,6 +177,31 @@ function create_user_cart_map(arr)
             user_cart.set(element, user_cart.get(element) + 1);
     }
 };
+async function getCountryDeliveryPrice(country) {
+    try {
+        let response = await $.ajax({
+            url: ajax_object.ajax_url,
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                action: 'get_country_delivery',
+                country: country
+            }
+        });
+
+        if (response.success) {
+            console.log("country delivery price is: " + response.data);
+            return response.data; 
+        } else {
+            console.error("Error fetching country delivery price: ", response.data);
+            return null;
+        }
+    } catch (error) {
+        console.log(slug);
+        console.error("AJAX Error: ", error);
+        return null;
+    }
+}
 
 
 function setEventHandlers()
@@ -340,6 +365,9 @@ function setEventHandlers()
                 }
                 swal_loading();
             })
+            $('#main-checkout-button').click(()=>{
+                
+            });
         }
         else if($('.rrstore-product-container'))
         {
@@ -509,9 +537,9 @@ async function update_page_UI()
             });
         }
     }
-    else if(window.location.href === cartUrl)
+    else if($('.rrstore-cart-page-container').length > 0 || $('#reciept-cart').length > 0)
     {
-        
+        debugger;
         swal_loading("updating cart...");
         await getCart_PHP();
         await update_table_data();
@@ -523,6 +551,69 @@ async function update_page_UI()
         let price_str = "Subtotal: " + "<p class = \"text-blue-800\" id = \"total-price-num\">$" + total_price+ "</p>";
         $('#total-price').html(price_str);
         swal_loading();
+        const requiredFields = [
+            'input[name="first_name"]',
+            'input[name="country_code"]',
+            'input[name="phone_number"]',
+            'input[name="city"]',
+            'input[name="street"]',
+            'input[name="address line"]',
+            'input[name="email"]',
+            '#country-select'
+        ];
+        requiredFields.forEach(function (selector) {
+            $(selector).attr('required', true);
+        });
+        $('.rrstore-cart-user-actions-container').on('submit', function (event) {
+            let isValid = true;
+
+            requiredFields.forEach(function (selector) {
+                if (!$(selector).val()) {
+                    $(selector).addClass('border-red-500');
+                    isValid = false;
+                } else {
+                    $(selector).removeClass('border-red-500');
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+                alert('Please fill all required fields.');
+            }
+        });
+        $('input, select').on('input change', function () {
+            $(this).removeClass('border-red-500');
+        });
+        if($('#reciept-cart').length>0)
+        {
+            debugger;
+            let sub_total = 0;
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+            const countryParam = params.get('country');
+            let delivery_price = await getCountryDeliveryPrice(countryParam);
+            for(let [key,value] of user_cart)
+            {
+                sub_total += await getProductPrice_PHP(key) * value;
+            }
+            for(let [key, value] of user_cart){
+                const entry = `
+                    <div class="flex justify-between w-full py-2 border-b">
+                        <span>${key}</span>
+                        <span>$${await getProductPrice_PHP(key) * value}</span>
+                    </div>
+                `;
+                $('#reciept-cart').append(entry);
+            }
+            debugger;
+            $('#reciept-cart').append(`
+                <div class = "w-full flex flex-col justify-end items-end space-y-2 mt-4 text-lg font-bold">
+                    <p>Subtotal: $${sub_total}</p>
+                    <p>Delivery: $${(delivery_price)?delivery_price:"We do not deliver to this country."}</p>
+                    <p>Total: $${(delivery_price)?Number(sub_total) + Number(delivery_price):"NA"}</p>                    
+                </div>
+            `);
+        }
     }
     setEventHandlers();
 }
@@ -637,7 +728,27 @@ handleCartPageResponsiveness();
 
 
 
-
+function get_code_from_country(country)
+{
+    country = country.toLowerCase();
+    let start = 0; end = countries.length-1;
+    country = country.charAt(0).toUpperCase() + country.substring(1);
+    let mid_point = -1;
+    while(start <= end)
+    {
+        mid_point = Math.floor((start+end)/2);
+        let temp_country = countries[mid_point].name;
+        if(temp_country < country)
+        {
+            start = mid_point+1;
+        }
+        else if(temp_country > country)
+            end = mid_point-1;
+        else 
+            return countries[mid_point].code;
+    }
+    return null;
+}
 
 
 const countries = [
