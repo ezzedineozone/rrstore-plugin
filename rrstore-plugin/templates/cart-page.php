@@ -14,6 +14,7 @@ $phone_number = isset($_GET['country_code']) && isset($_GET['phone_number'])
 $city = isset($_GET['city']) ? htmlspecialchars($_GET['city']) : 'not provided';
 $street = isset($_GET['street']) ? htmlspecialchars($_GET['street']) : 'not provided';
 $address_line = isset($_GET['address_line']) ? htmlspecialchars($_GET['address_line']) : 'not provided';
+$delivery_price = get_country_delivery_no_ajax();
 if($first_name == 'not provided'):
 ?>
 <div class='rrstore-cart-page-container'>
@@ -27,10 +28,12 @@ if($first_name == 'not provided'):
             <span class="text-blue-800" id = "total-price-num">$0</span>
         </p>
         <h1 class="rrstore-cart-user-actions-title">Address</h1>
+        <p id = "checkout-error-message" class = "test-sm text-red-500 hidden">
+        </p>
         <div class="flex flex-col w-full h-max mb-3 space-y-4">
             <div class="flex flex-row w-full h-max space-x-2 items-center justify-center">
                 <div class="flex flex-col w-1/2 items-center justify-center">
-                    <label for="firstname" class="w-full text-sm">First Name:</label>
+                    <label for="firstname" class="w-full text-sm required-field">First Name:</label>
                     <input name ="first_name" type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
                 </div>
                 <div class="flex flex-col w-1/2 items-center justify-center">
@@ -40,18 +43,18 @@ if($first_name == 'not provided'):
             </div>
             <div class="flex flex-row w-full h-max space-x-2 items-center justify-center">
                 <div class="flex flex-col w-1/2 items-center justify-center">
-                    <label for="email" class="w-full text-sm">Email:</label>
-                    <input name="email" type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
+                    <label for="email" class="w-full text-sm required-field">Email:</label>
+                    <input name="email" id ="email-input" type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
                 </div>
                 <div class="flex flex-col w-1/2 items-center justify-center">
-                    <label for="email" class="w-full text-sm ">Country:</label>
+                    <label for="country" class="w-full text-sm required-field ">Country:</label>
                     <select name="country" id="country-select" class="w-full h-8 border-2 border-gray-200 rounded-md pl-2">
                         <option value="" disabled selected class = "text-sm text-gray-300" >Select your country</option>
                     </select>
                 </div>
             </div>
             <div class="flex flex-col w-full h-max">
-                <label for ="phone_num" class = "w-full h-max">Phone number:</label>
+                <label for ="phone_num" class = "w-full h-max required-field">Phone number:</label>
                 <div class = "flex flex-row w-full h-max space-x-2">
                     <input name="country_code" placeholder="961" type = "number" class ="w-1/4 h-8 border-2 border-gray-200 rounded-md"/>
                     <input name="phone_number" placeholder="70123456" type = "number" class ="w-3/4 h-8 border-2 border-gray-200 rounded-md"/>
@@ -59,16 +62,16 @@ if($first_name == 'not provided'):
             </div>
             <div class="flex flex-row w-full h-max space-x-2 items-center justify-center">
                 <div class="flex flex-col w-1/2 items-center justify-center">
-                    <label for="city" class="w-full text-sm">City:</label>
+                    <label for="city" class="w-full text-sm required-field">City:</label>
                     <input name ="city" type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
                 </div>
                 <div class="flex flex-col w-1/2 items-center justify-center">
-                    <label for="street" class="w-full text-sm ">street:</label>
+                    <label for="street" class="w-full text-sm required-field">street:</label>
                     <input name = "street" type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
                 </div>
             </div>
             <div class="flex flex-col w-full h-max">
-                <label for="adress2" class="w-1/2">Adress Line</label>
+                <label for="adress2" class="w-1/2 required-field">Adress Line</label>
                 <input name = "address line" type="text" class="w-full h-8 border-2 border-gray-200 rounded-md" />
             </div>
         </div>
@@ -87,7 +90,7 @@ else :
 ?>
 <div class="w-full h-full space-y-8 p-4 flex flex-col justify-center items-center">
     <h1 class="font-bold text-3xl mb-8 w-2/3">
-        Your order has been received, and your information was forwarded to us!
+        Order summary:
     </h1>
     <div class="grid text-xl grid-cols-2 gap-x-32 gap-y-4 w-2/3 max-w-2/3">
         <p><strong>First Name:</strong> <?php echo $first_name; ?></p>
@@ -112,7 +115,7 @@ else :
         </div>
     </div>
     <div class="flex flex-col border-yellow-custom border rounded-md justify-center items-center p-8 max-w-2/3 w-2/3">
-        <h2 class="font-bold mt-6 mb-2 text-3xl text-yellow-custom ">Pay through the following to confirm your order: </h2>
+        <h2 class="font-bold mt-6 mb-2 text-3xl text-yellow-custom ">After clicking confirm below. Pay through the following to process your order: </h2>
         <div class = "flex flex-col spacey-y-4>">
             <!-- <?php 
             $payment_methods = get_option('payment_methods', []);
@@ -136,6 +139,16 @@ else :
                 <p class = "font-bold text-black text-2xl"> Whish: </p>
                 <p class=" text-2xl font-semibold text-blue-400 underline" > 03 142 379 </p>
             </div>
+            <?php if($delivery_price != -1): ?>
+            <div class = "flex flex-row space-x-2 justify-center items-center mt-4">
+                <button class = "px-4 py-2 w-max bg-yellow-custom text-lg font-bold text-white" id = "confirm-order-button">Confirm order</button>
+            </div>
+            <?php else : ?>
+                <div class = "flex flex-row space-x-2 justify-center items-center mt-4">
+                    <button class = "px-4 py-2 w-max bg-gray-600 text-lg font-bold text-gray-300 cursor-not-allowed" disabled id = "confirm-order-button">Confirm order</button>
+                    <p class = "text-sm text-gray-400">No delivery options </p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

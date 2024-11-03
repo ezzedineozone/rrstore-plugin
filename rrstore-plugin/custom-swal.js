@@ -49,3 +49,18 @@ function swal_loading(custom_msg =  'loading...') {
         swalLoadingVisible = false;
     }
 }
+function swal_confirmOrder() {
+    Swal.fire({
+        title: 'Order Received',
+        text: 'A receipt has been sent to your email. Make sure to pay through the instructions on this page or your email.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        allowOutsideClick: false, // Prevent closing by clicking outside
+        backdrop: true,
+        position: 'center',
+        showCloseButton: true,
+        customClass: {
+            popup: 'swal-popup', // Custom class for styling if needed
+        }
+    });
+}

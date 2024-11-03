@@ -7,6 +7,27 @@ let page_vertical = false;
 console.log('cart-js loaded');
 jQuery(document).ready(async function($){ 
     console.log($);
+function sendEmail(htmlContent, recipientEmail) {
+    $.ajax({
+        url: ajax_object.ajax_url,
+        type: 'POST',
+        data: {
+            action: 'send_html_email',
+            html_content: htmlContent,
+            recipient_email: recipientEmail
+        },
+        success: function(response) {
+            if (response.success) {
+                alert(response.data); // Show success message
+            } else {
+                alert('Error: ' + response.data); // Show error message
+            }
+        },
+        error: function() {
+            alert('An error occurred while sending the email.');
+        }
+    });
+} 
 async function getCart_PHP() {
     return $.ajax({
         url: ajax_object.ajax_url,
@@ -301,11 +322,12 @@ function setEventHandlers()
 
             );
         }
-        else if(window.location.href === cartUrl)
+        else if($('.rrstore-cart-page-container').length > 0 || $('#reciept-cart').length > 0)
         {
             $('.rrstore-delete-button').click(async (e)=>{
                 debugger;
                 let slug = get_slug(e.currentTarget.id);
+                activate_checkout_button();
                 await removeFromCartAll(slug);
                 await update_page_UI();
                 swal_removeFromCart();
@@ -322,13 +344,13 @@ function setEventHandlers()
                     let new_total = parseFloat($('#total-price-num').text().replace(/[$,]/g, '').trim()) + parseFloat(await getProductPrice_PHP(slug));
                     let price_str = "Subtotal: " + "<p class = \"text-blue-800\" id = \"total-price-num\">$" + new_total + "</p>";
                     $('#total-price').html(price_str);
-                    swal_loading();
                 }
+                swal_loading();
             });
             
             $('.decrement-qty').click(async (e) => {
                 swal_loading();
-                debugger;
+                activate_checkout_button();
                 let slug = get_slug(e.currentTarget.id);
                 let text_input_element_id = '#' + slug + '_qty';
                 let currentValue = parseInt($(text_input_element_id).val(), 10);
@@ -338,11 +360,11 @@ function setEventHandlers()
                     let new_total = parseFloat($('#total-price-num').text().replace(/[$,]/g, '').trim()) - parseFloat(await getProductPrice_PHP(slug));
                     let price_str = "Subtotal: " + "<p class = \"text-blue-800\" id = \"total-price-num\">$" + new_total + "</p>";
                     $('#total-price').html(price_str);
-                    swal_loading();
                 }
+                swal_loading();
             });
             $('.qty-text-input').on('change', async (e)=>{
-                
+                activate_checkout_button();
                 swal_loading();
                 let slug = get_slug(e.currentTarget.id);
                 let text_input_element_id = '#' + slug + '_qty';
@@ -365,9 +387,12 @@ function setEventHandlers()
                 }
                 swal_loading();
             })
-            $('#main-checkout-button').click(()=>{
-                
-            });
+            if($('#reciept-cart').length > 0)
+            {
+                $('#confirm-order-button').click(()=>{
+                    confirm_order();
+                });
+            }
         }
         else if($('.rrstore-product-container'))
         {
@@ -540,6 +565,7 @@ async function update_page_UI()
     else if($('.rrstore-cart-page-container').length > 0 || $('#reciept-cart').length > 0)
     {
         debugger;
+        activate_checkout_button();
         swal_loading("updating cart...");
         await getCart_PHP();
         await update_table_data();
@@ -575,11 +601,22 @@ async function update_page_UI()
                     $(selector).removeClass('border-red-500');
                 }
             });
-
-            if (!isValid) {
+            let email = $('#email-input').val();
+            let email_valid = validate_email(email);
+            $('#checkout-error-message').text("");
+            debugger;
+            if(!isValid)
+            {
                 event.preventDefault();
-                alert('Please fill all required fields.');
+                $('#checkout-error-message').toggleClass('hidden');
+                $('#checkout-error-message').append("Please enter all * fields");
             }
+            else if (!email_valid) {
+                event.preventDefault();
+                $('#checkout-error-message').toggleClass('hidden');
+                $('#checkout-error-message').append("Invalid email");
+            }
+
         });
         $('input, select').on('input change', function () {
             $(this).removeClass('border-red-500');
@@ -750,7 +787,29 @@ function get_code_from_country(country)
     return null;
 }
 
-
+function validate_email(email)
+{
+    var reg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (reg.test(email) == false) 
+    {
+        return false;
+    }
+    return true;
+}
+function activate_checkout_button(){
+    if(is_cart_empty())
+        $('#main-checkout-button').addClass('disabled');
+    else 
+        $('#main-checkout-button').removeClass('disabled');
+}
+function is_cart_empty(){
+    for(let [key,value] of user_cart)
+    {
+        if(value > 0)
+            return false;
+    }
+    return true;
+}
 const countries = [
     { code: "AF", name: "Afghanistan" },
     { code: "AL", name: "Albania" },
@@ -943,4 +1002,7 @@ const countries = [
 countries.forEach(country => {
     $('#country-select').append(new Option(country.name, country.code));
 });
+function confirm_order(){
+    swal_confirmOrder();
+}
 });

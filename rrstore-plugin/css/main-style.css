@@ -632,10 +632,6 @@ video {
   z-index: 50 !important;
 }
 
-.col-span-2 {
-  grid-column: span 2 / span 2 !important;
-}
-
 .m-4 {
   margin: 1rem !important;
 }
@@ -670,6 +666,10 @@ video {
 
 .mt-6 {
   margin-top: 1.5rem !important;
+}
+
+.mt-4 {
+  margin-top: 1rem !important;
 }
 
 .flex {
@@ -745,6 +745,10 @@ video {
   width: 0.625rem !important;
 }
 
+.w-2\/3 {
+  width: 66.666667% !important;
+}
+
 .w-24 {
   width: 6rem !important;
 }
@@ -782,12 +786,12 @@ video {
   width: max-content !important;
 }
 
-.w-2\/3 {
-  width: 66.666667% !important;
-}
-
 .cursor-pointer {
   cursor: pointer !important;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed !important;
 }
 
 .appearance-none {
@@ -806,6 +810,10 @@ video {
 
 .flex-col {
   flex-direction: column !important;
+}
+
+.items-end {
+  align-items: flex-end !important;
 }
 
 .items-center {
@@ -951,6 +959,21 @@ video {
   background-color: rgb(228 195 45 / var(--tw-bg-opacity)) !important;
 }
 
+.bg-gray-300 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity)) !important;
+}
+
+.bg-gray-800 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity)) !important;
+}
+
+.bg-gray-600 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity)) !important;
+}
+
 .p-2 {
   padding: 0.5rem !important;
 }
@@ -1029,6 +1052,11 @@ video {
   line-height: 1.5rem !important;
 }
 
+.text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
 .text-sm {
   font-size: 0.875rem !important;
   line-height: 1.25rem !important;
@@ -1036,11 +1064,6 @@ video {
 
 .text-xl {
   font-size: 1.25rem !important;
-  line-height: 1.75rem !important;
-}
-
-.text-lg {
-  font-size: 1.125rem !important;
   line-height: 1.75rem !important;
 }
 
@@ -1081,6 +1104,11 @@ video {
   color: rgb(55 65 81 / var(--tw-text-opacity)) !important;
 }
 
+.text-red-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(239 68 68 / var(--tw-text-opacity)) !important;
+}
+
 .text-white {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
@@ -1089,6 +1117,11 @@ video {
 .text-yellow-custom {
   --tw-text-opacity: 1 !important;
   color: rgb(228 195 45 / var(--tw-text-opacity)) !important;
+}
+
+.text-gray-400 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(156 163 175 / var(--tw-text-opacity)) !important;
 }
 
 .underline {
@@ -1981,6 +2014,19 @@ video {
   padding: 0.5rem;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.rrstore-cart-user-actions-checkout.disabled {
+  cursor: not-allowed;
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
+.required-field::after {
+  content: " *";
+  color: red;
 }
 
 .rrstore-cart-user-actions-save-address {

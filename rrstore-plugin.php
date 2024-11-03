@@ -62,19 +62,19 @@ function rrstore_product(){
     register_post_type('products', $args);
     flush_rewrite_rules();
 }
-function register_payment_methods_submenu() {
+function register_delivery_prices() {
     add_submenu_page(
         'edit.php?post_type=products',
         'Delivery Prices',             
         'Delivery Prices',             
         'manage_options',              
         'payment-methods',             
-        'payment_methods_page_callback'
+        'register_delivery_prices_callback'
     );
 }
-add_action('admin_menu', 'register_payment_methods_submenu');
+add_action('admin_menu', 'register_delivery_prices');
 
-function payment_methods_page_callback() {
+function register_delivery_prices_callback() {
     if (isset($_POST['submit_delivery_price'])) {
         $country = sanitize_text_field($_POST['country']);
         $delivery_price = floatval($_POST['delivery_price']);
@@ -386,33 +386,38 @@ function payment_methods_page_callback() {
     <?php
 }
 function get_country_delivery() {
-    // Check if the 'country' parameter is set in the POST request
     if (!isset($_GET['country'])) {
-        wp_send_json_error('Country parameter is missing.'); // Provide an error message
-        wp_die(); // Stop further execution
+        wp_send_json_error('Country parameter is missing.');
+        wp_die();
     }
-
-    // Sanitize the country code input to prevent security issues
     $country_iso_code = sanitize_text_field($_GET['country']); 
-
-    // Debugging output (optional)
-    // Remove var_dump in production; it's only for debugging
     error_log('country iso php: ' . $country_iso_code);
-
-    // Retrieve the delivery price option for the given country code
     $price = get_option("delivery_price_{$country_iso_code}");
-
-    // Debugging output for the price (optional)
     error_log("price: " . ($price !== false ? $price : 'not set'));
-
-    // Check if the price was successfully retrieved
     if ($price !== false) {
         wp_send_json_success($price);
     } else {
-        wp_send_json_error('Delivery price not set for this country.'); // Send a specific error message
+        wp_send_json_error('Delivery price not set for this country.');
     }
-
-    wp_die(); // Stop further execution
+}
+function get_country_delivery_no_ajax() {
+    $country = "";
+    if (isset($_GET['country'])) {
+        $country = $_GET['country'];
+    }
+    else 
+    {
+        return -1;
+    }
+    $country_iso_code = sanitize_text_field($country); 
+    error_log('country iso php: ' . $country_iso_code);
+    $price = get_option("delivery_price_{$country_iso_code}");
+    error_log("price: " . ($price !== false ? $price : 'not set'));
+    if ($price !== false) {
+        return $price;
+    } else {
+        return -1;
+    }
 }
 
 add_action('wp_ajax_get_country_delivery', 'get_country_delivery');
@@ -834,6 +839,27 @@ function prdct_price() {
     }
 }
 
+function send_email_with_html() {
+    if (isset($_POST['html_content']) && isset($_POST['recipient_email'])) {
+        $html_content = wp_kses_post($_POST['html_content']);
+        $recipient_email = sanitize_email($_POST['recipient_email']);
+
+        $subject = 'New HTML Content Submitted';
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+        $sent = wp_mail($recipient_email, $subject, $html_content, $headers);
+        if ($sent) {
+            wp_send_json_success('Email sent successfully.');
+        } else {
+            wp_send_json_error('Email could not be sent.');
+        }
+    } else {
+        wp_send_json_error('Invalid input.');
+    }
+
+    wp_die();
+}
+add_action('wp_ajax_send_html_email', 'send_email_with_html');
+add_action('wp_ajax_nopriv_send_html_email', 'send_email_with_html'); // For non-logged in users
 
 
 add_action('wp_ajax_prdct_price', 'prdct_price');

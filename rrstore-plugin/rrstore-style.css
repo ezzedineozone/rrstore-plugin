@@ -316,8 +316,16 @@
 .rrstore-cart-user-actions-buttons-container{
     @apply w-full h-max p-4 flex flex-row space-x-4 items-center justify-center;
 }
-.rrstore-cart-user-actions-checkout{
+.rrstore-cart-user-actions-checkout {
     @apply bg-blue-800 text-white rounded-sm p-2;
+}
+
+.rrstore-cart-user-actions-checkout.disabled {
+    @apply bg-gray-400 text-gray-200 cursor-not-allowed;
+}
+.required-field::after {
+    content: " *";
+    color: red;
 }
 .rrstore-cart-user-actions-save-address{
     @apply bg-yellow-custom text-white rounded-sm p-2;
