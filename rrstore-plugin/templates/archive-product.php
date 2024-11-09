@@ -8,13 +8,13 @@
 <?php rrstore_plugin_header() ?>
 <div class="rrstore-products-page-container">
     <div class="rrstore-products-page-actions">
-        <div class="flex flex-row justify-start w-max top-0 left-0 absolute">
+        <!-- <div class="flex flex-row justify-start w-max top-0 left-0 absolute">
             <button class="bg-blue-800 px-2 py-1 w-max" id="open-filter-menu-button">
                 <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5" />
                 </svg>
             </button>
-        </div>
+        </div> -->
         <h1 class="rrstore-products-page-title">
             Browse Products
         </h1>
@@ -57,7 +57,7 @@
                     <div class="rrstore-product-card-actions-container">
                         <button class="rrstore-product-card-actions-details" id="<?php echo $post_slug . '_info'; ?>">Info</Button>
                         <button class="rrstore-product-card-actions-cart" id="<?php echo $post_slug . '_cart'; ?>">
-                            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <svg class="w-7 h-7 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
                             </svg>
                         </button>
