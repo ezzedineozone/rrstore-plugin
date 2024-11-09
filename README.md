@@ -13,6 +13,10 @@ This plugin allows you to easily:
 - Checkout functionality and extra charges are for you to implement, view cart.js and cart-page.php
 - Resposnive header that includes your primary navigation for both mobile and desktop
 - Responsive UI for both desktop and mobile
+### UPCOMING (unfinished or planned):
+- Set delivery price per country
+- Set payment options through online links
+- email reciept / full order information on checkout to user and or admin
 
 #### To change the logo and default pic for products without a picture, replace their respective images (png or jpeg) in rrstore-plugin/images
 
