@@ -1,7 +1,7 @@
 # A plugin that adds support for products selling with checkout and cart funcationality, styles are ready
 #### Make sure to run npm run watch to build the tailwind css located in rrstore-plugin/css
 #### Make sure main theme is not conflicting with plugin styling - that is, pay attention if the main theme has any general css setup to html elements
-#### if you want a fully independent plugin from the main theme, checkout the rrstore-rrsite-compatible branch, has full isolation of plugin pages with the style ready (blue and yellow)
+#### THE PLUGIN IS FULLY INDEPENDENT FOR NOW, THE STYLING ISNT AFFECTED BY YOUR MAIN THEME, TO MODIFY THE WAY THE PLUGIN WORKS MODIFY THE SOURCE FILES DIRECTLY
 The master branch is more dependent, it will havethe blue and yellow style but is affected by general styling on your website
 
 ### FEATURES:
