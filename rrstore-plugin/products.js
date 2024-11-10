@@ -87,18 +87,16 @@ jQuery(document).ready(function($){
     let maxwidth = screen.width;
     function handleResponsiveness(){
       debugger;
-        let min_width = 2*$('.rrstore-product-card').first().outerWidth(true) + $('.rrstore-categories-container').outerWidth(true) +2*parseInt($('.rrstore-products-container').css('padding-left'));
-        if ($(window).width >= 4 * 370) {  // 4 * 370px
-          $('.rrstore-product-card').removeClass('w-[calc(50%-1rem)] w-[calc(100%-1rem)]');
-          $('.rrstore-product-card').addClass('w-[calc(25%-1rem)]');
-      } 
-      else if (windowWidth >= 3 * 370) {  // 3 * 370px
-          $('.rrstore-product-card').removeClass('w-[calc(25%-1rem)] w-[calc(100%-1rem)]');
-          $('.rrstore-product-card').addClass('w-[calc(50%-1rem)]');
-      }
-      else if (windowWidth >= 2 * 370) {  // 2 * 370px
-          $('.rrstore-product-card').removeClass('w-[calc(25%-1rem)] w-[calc(50%-1rem)]');
-          $('.rrstore-product-card').addClass('w-[calc(100%-1rem)]');
+      var width = $(window).width();
+      $('.rrstore-product-card').removeClass('four three two one');
+      if (width >= 4 * 360) {
+          $('.rrstore-product-card').addClass('four');
+      } else if (width >= 3 * 360) {
+          $('.rrstore-product-card').addClass('three');
+      } else if (width >= 2 * 360) {
+          $('.rrstore-product-card').addClass('two');
+      } else {
+          $('.rrstore-product-card').addClass('one');
       }
     }
     function handleMinWidths(){
@@ -161,6 +159,7 @@ jQuery(document).ready(function($){
         handleResponsiveness();
     });
     handleMinWidths();
+    handleResponsiveness();
     setEventHandlersProductsPage();
     maintainValidPriceRange();
 });

@@ -76,7 +76,18 @@
 .rrstore-product-card{
     @apply border-black my-2 mx-2 border w-[calc(25%-1rem)] h-2/3 flex flex-col px-2 py-1 rounded-lg items-center hover:scale-105 transition-all;
 }
-
+.rrstore-product-card.four{
+    @apply border-black my-2 mx-2 border w-[calc(25%-1rem)] h-2/3 flex flex-col px-2 py-1 rounded-lg items-center hover:scale-105 transition-all;
+}
+.rrstore-product-card.three{
+    @apply border-black my-2 mx-2 border w-[calc(33%-1rem)] h-2/3 flex flex-col px-2 py-1 rounded-lg items-center hover:scale-105 transition-all;
+}
+.rrstore-product-card.two{
+    @apply border-black my-2 mx-2 border w-[calc(50%-1rem)] h-2/3 flex flex-col px-2 py-1 rounded-lg items-center hover:scale-105 transition-all;
+}
+.rrstore-product-card.one{
+    @apply border-black my-2 mx-2 border w-[calc(100%-1rem)] h-max flex flex-col px-2 py-1 rounded-lg items-center hover:scale-105 transition-all;
+}
 .rrstore-product-card-image-container{
     @apply w-2/3 h-full mt-4 mb-4 flex justify-center;
 }
@@ -97,7 +108,7 @@
     @apply text-black font-bold text-base;
 }
 .rrstore-product-card-actions-container{
-    @apply flex-row flex space-x-2 w-2/3 h-16 items-center justify-center my-4;
+    @apply flex-row flex space-x-2 w-2/3 h-[calc(10%)] items-center justify-center my-4;
 }
 .rrstore-product-card-actions-number{
     @apply border-blue-800 border-2 w-1/2 h-full;

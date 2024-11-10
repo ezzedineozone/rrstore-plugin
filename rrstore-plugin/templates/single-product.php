@@ -3,6 +3,13 @@
 <?php
 if (have_posts()) :
     while (have_posts()) : the_post(); ?>
+    <div class="flex flex-row justify-start w-full h-max py-4 pr-8">
+        <div class="flex flex-row justify-start w-max">
+            <button class="bg-blue-800 text-white text-xl font-bold px-2 py-1 w-max transform transition duration-200 ease-in-out hover:scale-105 hover:opacity-90" id="back-home-button">
+                &larr; Back
+            </button>
+        </div>
+    </div>
     <div class = "rrstore-product-page-container">
         <div class = "rrstore-product-page-image-container">
             <?php
@@ -43,5 +50,7 @@ else :
     echo '<p>No product found.</p>';
 endif;
 ?>
-
+<div class = "flex flex-row justify-end w-full h-max">
+    <p>BAck</p>
+</div>
 <?php rrstore_plugin_footer(); ?>
