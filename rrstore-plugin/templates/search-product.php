@@ -4,6 +4,10 @@
  * Template Name: Products page
  */
 $result = get_search_results_products();
+if(count($result) == 0)
+{
+    $result[] = "-1";
+}
 ?>
 
 <?php rrstore_plugin_header() ?>
