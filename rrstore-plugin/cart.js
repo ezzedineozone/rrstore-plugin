@@ -492,7 +492,7 @@ function setEventHandlers()
 async function update_page_UI()
 {
     await getCart_PHP();
-    if(window.location.href === productsUrl)
+    if($('.rrstore-products-container').length() >= 0)
     {
         for(let [key, value] of user_cart)
         {

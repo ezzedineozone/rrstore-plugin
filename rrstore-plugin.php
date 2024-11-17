@@ -6,6 +6,8 @@
 * Description: products for rrstore
 * Author: Ezzedine Al Ozon
 */
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 function product_plugin_activate(){
     add_option( $option = "default", $value = '', $deprecated = '', $autoload = 'yes' );
@@ -17,12 +19,10 @@ function product_plugin_activate(){
     update_option('permalink_structure', '/%postname%/');
     flush_rewrite_rules();
 }
-// function twentytwenty_dequeue_styles() {
-// 	wp_dequeue_style( 'twentytwenty-style' );
-// 	wp_dequeue_style( 'twentytwenty-print-style' );
-//     wp_dequeue_style('chld_thm_cfg_parent');
-// }
-// add_action( 'wp_enqueue_scripts', 'twentytwenty_dequeue_styles', 20 );
+require_once(plugin_dir_path(__FILE__). "rrstore-plugin/php-helper-functions/jaro-winkler.php");
+
+
+
 function rrstore_product(){
     $labels = array(
         'name'                  => _x('Products', 'Post type general name', 'textdomain'),
@@ -566,6 +566,12 @@ function register_templates($template){
         if(file_exists($custom_template))
             return $custom_template;
     }
+    else if(is_page('search-products'))
+    {
+        $custom_template = $plugin_path . 'rrstore-plugin/templates/search-product.php';
+        if(file_exists($custom_template))
+            return $custom_template;
+    }
     return $template;
 }
 add_filter('template_include', 'register_templates');
@@ -579,7 +585,7 @@ function product_plugin_active(){
     return in_array($plugin_file, $active_plugins);
 }
 function wpse_340767_dequeue_theme_assets() {
-    if(is_page('cart') || is_post_type_archive('products') || is_singular('products'))
+    if(is_page('cart') || is_post_type_archive('products') || is_singular('products') || is_page('search-products'))
     {
         $wp_scripts = wp_scripts();
         $wp_styles  = wp_styles();
@@ -594,7 +600,7 @@ function wpse_340767_dequeue_theme_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'wpse_340767_dequeue_theme_assets', 999 );
 function rrstore_plugin_script(){
-    if(is_page('cart') || is_post_type_archive('products') || is_category() || is_singular('products')):
+    if(is_page('cart') || is_post_type_archive('products') || is_category() || is_singular('products') || is_page('search-products')):
         wp_enqueue_script('jquery', 'https://code.jquery.com/jquery-3.7.1.min.js', array(), '3.7.1', true);
         wp_enqueue_script('Swal', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), '0.1.0',  true);
         wp_enqueue_script('main-js_rrstore', plugin_dir_url(__FILE__).'/rrstore-plugin/main.js', array('jquery', 'Swal'), '0.1.0', true);
@@ -614,6 +620,49 @@ function start_session(){
     if(!session_id())
         session_start();
 }
+function get_search_results_products(){
+    $jw = new StringCompareJaroWinkler();
+    $products_query = new WP_Query(
+        array(
+            'post_type'      => 'products',
+            'posts_per_page' => -1
+        )
+    );
+    $slugs = array();
+    if($products_query->have_posts())
+    {
+        while($products_query->have_posts())
+        {
+            $products_query->the_post();
+            $slug = get_post_field('post_name', get_the_ID());
+            $slugs[] = $slug;
+        }
+    }
+    if(isset($_POST["search_query"]))
+    {
+        $result_slugs = array();
+        $search_query = $_POST["search_query"];
+        foreach($slugs as $slug)
+        {
+            $title = get_title_from_slug($slug);
+            if($jw->compare_custom($search_query, $title) > 0.8)
+            {
+                $result_slugs[] = $slug;
+            }
+        }
+        return $result_slugs;
+    }
+    return array();
+}
+function get_title_from_slug($slug)
+{
+
+    $slug = str_replace('-', ' ', $slug);
+    $title = ucwords($slug);
+
+    return $title;
+    
+}
 function rrstore_plugin_style(){
     wp_enqueue_style('flowbite-css', 'https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css', array(), '2.5.1');
     wp_enqueue_style('main-style', plugin_dir_url(__FILE__)."/rrstore-plugin/css/main-style.css", array(), '0.1.0');
@@ -622,7 +671,7 @@ function rrstore_admin_scripts(){
     wp_enqueue_script('admin-product-js', plugin_dir_url(__FILE__) . '/rrstore-plugin/image-library.js', array(), null, true);
 }
 function create_required_pages(){
-    $page_titles = array('cart', 'products');
+    $page_titles = array('cart', 'products', 'search-products');
     foreach($page_titles as $title)
     {
         $query = new WP_QUERY(array(

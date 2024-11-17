@@ -1,4 +1,5 @@
 var baseUrl = wpData.baseUrl;
+var searchUrl = baseUrl + "/" + "search-products/"
 var cartUrl = baseUrl + "/" + "cart/";
 var productsUrl = baseUrl + "/" +"products/";
 var aboutusUrl = baseUrl + "/" + "about-us/";
@@ -14,17 +15,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 jQuery(document).ready(($)=>{
+    $('#main-search-form').attr('action', searchUrl);
     function handleHeaderResponsiveness(){
         let min_width_to_display_nav = $('.navigation-container').outerWidth(true) +$('.logo-container').outerWidth(true) + 2*parseInt($('.header').css('padding-left'))+10;
         function mainHandleResponsiveness(){
+            debugger;
             if($(window).width() < min_width_to_display_nav)
             {
                 $('.navigation-container').hide();
+                $('.logo-container').hide();
                 $('#mobile-navigation-button-container').addClass('flex');
                 $('#mobile-navigation-button-container').removeClass('hidden');
             }
             else
             {
+                $('.logo-container').show();
                 $('#mobile-navigation-button-container').removeClass('flex');
                 $('#mobile-navigation-button-container').addClass('hidden');
                 $('.navigation-container').show();

@@ -26,9 +26,14 @@
             echo `<h1>rrstore plugin not activated!</h1>`;
             return;
         }
-        $query = new WP_Query();
-        if (have_posts()) :
-            while (have_posts()) : the_post();
+        $query = new WP_Query(
+            array(
+                'post_type'=>'products',
+                'posts_per_page'=>-1
+            )
+        );
+        if ($query->have_posts()) :
+            while ($query->have_posts()) : $query->the_post();
                 $post_slug = get_post_field('post_name', get_the_ID());
         ?>
                 <div class="rrstore-product-card" id="<?php echo $post_slug . '_card'; ?>">
