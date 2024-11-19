@@ -412,7 +412,7 @@ function setEventHandlers()
                 await addToCart_PHP(slug, qty-old_qty);
                 let old_html_info = $(info_btn_id).clone(true);
                 $(info_btn_id).replaceWith(`
-                    <div class="relative flex items-center max-w-[10rem] h-full w-full" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
+                    <div class="relative flex items-center max-w-[10rem] h-full w-1/2" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
                         <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
                             <svg class="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
