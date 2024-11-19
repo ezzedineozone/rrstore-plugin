@@ -794,10 +794,6 @@ video {
   width: max-content !important;
 }
 
-.w-\[calc\(85\%\)\] {
-  width: calc(85%) !important;
-}
-
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
@@ -1036,16 +1032,16 @@ video {
   padding-left: 0.5rem !important;
 }
 
+.pr-8 {
+  padding-right: 2rem !important;
+}
+
 .pt-4 {
   padding-top: 1rem !important;
 }
 
 .pt-5 {
   padding-top: 1.25rem !important;
-}
-
-.pr-8 {
-  padding-right: 2rem !important;
 }
 
 .text-center {
@@ -1372,6 +1368,13 @@ video {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.rrstore-product-page-container.vertical {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
 }
 
 .rrstore-products-container {
@@ -2100,11 +2103,26 @@ video {
   justify-content: center;
 }
 
+.rrstore-product-page-image-container.vertical {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
 .rrstore-product-page-image {
   height: 100%;
   width: 100%;
-  -o-object-fit: contain;
-     object-fit: contain;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.rrstore-product-page-image.vertical {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .rrstore-product-page-info-container {
@@ -2122,6 +2140,25 @@ video {
 }
 
 .rrstore-product-page-info-container {
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}
+
+.rrstore-product-page-info-container.vertical {
+  display: flex;
+  height: -moz-max-content;
+  height: max-content;
+  width: 100%;
+  flex-direction: column;
+}
+
+.rrstore-product-page-info-container.vertical > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+}
+
+.rrstore-product-page-info-container.vertical {
   border-radius: 0.5rem;
   padding: 1.25rem;
 }

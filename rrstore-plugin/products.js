@@ -86,17 +86,41 @@ function getSlugFromUrl(url)
 jQuery(document).ready(function($){
     let maxwidth = screen.width;
     function handleResponsiveness(){
-      debugger;
-      var width = $(window).width();
-      $('.rrstore-product-card').removeClass('four three two one');
-      if (width >= 4 * 360) {
-          $('.rrstore-product-card').addClass('four');
-      } else if (width >= 3 * 360) {
-          $('.rrstore-product-card').addClass('three');
-      } else if (width >= 2 * 360) {
-          $('.rrstore-product-card').addClass('two');
-      } else {
-          $('.rrstore-product-card').addClass('one');
+      if($('.rrstore-product-card').length > 0)
+      {
+        debugger;
+        var width = $(window).width();
+        $('.rrstore-product-card').removeClass('four three two one');
+        if (width >= 4 * 360) {
+            $('.rrstore-product-card').addClass('four');
+        } else if (width >= 3 * 360) {
+            $('.rrstore-product-card').addClass('three');
+        } else if (width >= 2 * 360) {
+            $('.rrstore-product-card').addClass('two');
+        } else {
+            $('.rrstore-product-card').addClass('one');
+        }
+      }
+      else if($('.rrstore-product-page-container').length > 0)
+      {
+        debugger;
+        var width = $(window).width();
+        $('.rrstore-product-page-container').removeClass('vertical');
+        $('.rrstore-product-page-info-container').removeClass('vertical');
+        $('.rrstore-product-page-image-container').removeClass('vertical');
+        if(width <= 600)
+        {
+          $('.rrstore-product-page-container').addClass('vertical');
+          $('.rrstore-product-page-info-container').addClass('vertical');
+          $('.rrstore-product-page-image-container').addClass('vertical');
+        }
+        else 
+        {
+          $('.rrstore-product-page-container').removeClass('vertical');
+          $('.rrstore-product-page-container').removeClass('vertical');
+          $('.rrstore-product-page-info-container').removeClass('vertical');
+          $('.rrstore-product-page-image-container').removeClass('vertical');
+        }
       }
     }
     function handleMinWidths(){

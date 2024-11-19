@@ -400,8 +400,9 @@ function setEventHandlers()
                 });
             }
         }
-        else if($('.rrstore-product-container'))
+        else if($('.rrstore-product-page-container').length > 0)
         {
+            debugger;
             $('.rrstore-product-page-actions-cart').on('click', async (e)=>{
                 swal_loading();
                 let slug  = get_slug(e.currentTarget.id);
@@ -411,15 +412,15 @@ function setEventHandlers()
                 await addToCart_PHP(slug, qty-old_qty);
                 let old_html_info = $(info_btn_id).clone(true);
                 $(info_btn_id).replaceWith(`
-                    <div class="relative flex items-center max-w-[8rem]" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
-                        <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100  focus:ring-2 focus:outline-none">
-                            <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <div class="relative flex items-center max-w-[10rem] h-full w-full" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
+                        <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                            <svg class="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
                             </svg>
                         </button>
-                        <input min ="1" max = "999" type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 qty-text-input" value="${qty}" required />
-                        <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100  focus:ring-2 focus:outline-none">
-                            <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                        <input min ="1" max = "999" type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-full w-full text-center text-gray-900 text-lg focus:ring-blue-500 focus:border-blue-500 block py-2.5  qty-text-input" value="${qty}" required />
+                        <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                            <svg class="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
                             </svg>
                         </button>
@@ -467,11 +468,11 @@ function setEventHandlers()
                 let cart_button_id = '#' + slug + '_cart';
                 let old_html_cart = $(cart_button_id).clone(true);
                 $(cart_button_id).replaceWith(`
-                    <button class = "rrstore-delete-button" id = \'${cart_button_id.substring(1,cart_button_id.length)}\'>
-                        <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                        </svg>
-                    </button>`);
+                            <button class = "p-2 bg-red-600 h-full w-auto h-full flex items-center justify-center rounded-md cursor-pointer" id = "${cart_button_id.substring(1,cart_button_id.length)}">
+                                <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                </svg>
+                            </button>`);
                 $(cart_button_id).click(async ()=>{
                     swal_loading();
                     await removeFromCartAll(slug);
@@ -484,6 +485,7 @@ function setEventHandlers()
                 swal_loading();
                 swal_addToCart();
             });
+            debugger;
             $('#back-home-button').click(()=>{
                 window.location.href = productsUrl;
             })
@@ -491,8 +493,9 @@ function setEventHandlers()
 }
 async function update_page_UI()
 {
+    debugger;
     await getCart_PHP();
-    if($('.rrstore-products-container').length() >= 0)
+    if($('.rrstore-products-container').length > 0)
     {
         for(let [key, value] of user_cart)
         {
@@ -753,6 +756,183 @@ async function update_page_UI()
             `);
         }
     }
+    else if($('.rrstore-product-page-container').length > 0)
+    {
+        debugger;
+        let slug = $('.rrstore-product-page-actions-cart').attr('id')?.split('_')[0] || null;
+        let info_btn_id = '#' + slug + '_info';
+        let old_html_info = $(info_btn_id).clone(true);
+        let value = await getItemQty(slug);
+        if(value > 0)
+        {
+            $(info_btn_id).replaceWith(`
+                <div class=" flex items-center w-1/2 h-full" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
+                    <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class=" decrement-qty bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-full focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                        <svg class="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                        </svg>
+                    </button>
+                    <input min ="1" max = "999" type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-full w-full text-center text-gray-900 text-lg focus:ring-blue-500 focus:border-blue-500 block py-2.5  qty-text-input" value="${value}" required />
+                    <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="increment-qty bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                        <svg class="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                        </svg>
+                    </button>
+                </div>
+            `);
+            let text_input_element_id = `#${slug}_qty`;
+                let decrement_button_id = `#${slug}_decrement-button`;
+                let increment_button_id = `#${slug}_increment-button`;
+                $(increment_button_id).click(async() => {
+                    swal_loading();
+                    let currentValue = parseInt($(text_input_element_id).val(), 10);
+                    if (!isNaN(currentValue) && currentValue != 99) {
+                        await addToCart_PHP(slug,1);
+                        $(text_input_element_id).val(currentValue + 1);
+                        swal_loading();
+                    }
+                });
+                
+                $(decrement_button_id).click(async () => {
+                    swal_loading();
+                    let currentValue = parseInt($(text_input_element_id).val(), 10);
+                    if (!isNaN(currentValue) && currentValue > 1) {
+                        await removeFromCartSingle(slug);
+                        $(text_input_element_id).val(currentValue - 1);
+                    }
+                    swal_loading();
+                });
+                $(text_input_element_id).on('change',async ()=>{
+                    swal_loading();
+                    let in_slug = get_slug(text_input_element_id.substring(1, text_input_element_id.length));
+                    let old_qty = getItemQty(in_slug);
+                    let qty = $(text_input_element_id).val();
+                    if(old_qty < qty)
+                    {
+                        await addToCart_PHP(slug, qty-old_qty);
+                    }
+                    else if(old_qty> qty)
+                    {
+                        await remove_from_cart(slug, old_qty - qty);
+                    }
+                    swal_loading();
+                });
+    
+                let cart_button_id = '#' + slug + '_cart';
+                let old_html_cart = $(cart_button_id).clone(true);
+                
+                $(cart_button_id).replaceWith(`
+                    <button class = "p-2 bg-red-600 h-full w-auto flex items-center justify-center rounded-md cursor-pointer" id = "${cart_button_id.substring(1,cart_button_id.length)}">
+                        <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                        </svg>
+                    </button>`);
+                
+                $(cart_button_id).click(async ()=>{
+                    debugger;
+                    swal_loading();
+                    await removeFromCartAll(slug);
+                    $(cart_button_id).replaceWith(old_html_cart);
+                    $(cart_button_id).click(async (e)=>{
+                        debugger;
+                        swal_loading();
+                        let slug  = get_slug(e.currentTarget.id);
+                        let info_btn_id = '#' + slug + '_info';
+                        let old_qty = getItemQty(slug);
+                        let qty = $(info_btn_id).is('input')?$(info_btn_id).val():1;
+                        await addToCart_PHP(slug, qty-old_qty);
+                        let old_html_info = $(info_btn_id).clone(true);
+                        $(info_btn_id).replaceWith(`
+                            <div class="relative flex items-center max-w-[10rem] h-full" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
+                                <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                                    <svg class="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+                                    </svg>
+                                </button>
+                                <input type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-full text-center text-gray-900 text-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 qty-text-input" value="${qty}" min ="1" max = "999" required />
+                                <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                                    <svg class="w-6 h-6 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        `);
+                        let text_input_element_id = `#${slug}_qty`;
+                        let decrement_button_id = `#${slug}_decrement-button`;
+                        let increment_button_id = `#${slug}_increment-button`;
+                        $(increment_button_id).click(async() => {
+                            swal_loading();
+                            let currentValue = parseInt($(text_input_element_id).val(), 10);
+                            if (!isNaN(currentValue) && currentValue != 99) {
+                                await addToCart_PHP(slug,1);
+                                $(text_input_element_id).val(currentValue + 1);
+                                swal_loading();
+                            }
+                            else 
+                                swal_loading();
+                        });
+                        
+                        $(decrement_button_id).click(async () => {
+                            swal_loading();
+                            let currentValue = parseInt($(text_input_element_id).val(), 10);
+                            if (!isNaN(currentValue) && currentValue > 1) {
+                                debugger;
+                                await removeFromCartSingle(slug);
+                                $(text_input_element_id).val(currentValue - 1);
+                                swal_loading();
+                            }
+                            else 
+                                swal_loading();
+                        });
+                        $(text_input_element_id).on('change',async ()=>{
+                            swal_loading();
+                            let in_slug = get_slug(text_input_element_id.substring(1, text_input_element_id.length));
+                            let old_qty = getItemQty(in_slug);
+                            let qty = $(text_input_element_id).val();
+                            if(old_qty < qty)
+                            {
+                                await addToCart_PHP(slug, qty-old_qty);
+                            }
+                            else if(old_qty> qty)
+                            {
+                                await remove_from_cart(slug, old_qty - qty);
+                            }
+                            else 
+                                swal_loading();
+                            swal_loading();
+                        });
+                        debugger;
+                        let cart_button_id = '#' + slug + '_cart';
+                        let old_html_cart = $(cart_button_id).clone(true);
+                        
+                        $(cart_button_id).replaceWith(`
+                            <button class = "p-2 bg-red-600 h-full w-auto h-full flex items-center justify-center rounded-md cursor-pointer" id = "${cart_button_id.substring(1,cart_button_id.length)}">
+                                <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                </svg>
+                            </button>`);
+                        
+                        $(cart_button_id).click(async ()=>{
+                            swal_loading();
+                            await removeFromCartAll(slug);
+                            $(cart_button_id).replaceWith(old_html_cart);
+                            $(info_btn_id).replaceWith(old_html_info);
+                            swal_loading();
+                            swal_removeFromCart();
+                        });
+                        swal_loading();
+                        swal_addToCart();
+                            
+                    })
+                    $(info_btn_id).replaceWith(old_html_info);
+                    $(info_btn_id).click(()=>{
+                        
+                    })
+                    swal_loading();
+                    swal_removeFromCart();
+                });
+        } 
+    }
     setEventHandlers();
 }
 
@@ -858,7 +1038,6 @@ function debounce(func, wait) {
         timeout = setTimeout(() => func.apply(this, args), wait);
     };
 }
-
 await update_page_UI();
 handleCartPageResponsiveness();
 

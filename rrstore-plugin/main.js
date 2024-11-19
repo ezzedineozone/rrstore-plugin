@@ -19,7 +19,6 @@ jQuery(document).ready(($)=>{
     function handleHeaderResponsiveness(){
         let min_width_to_display_nav = $('.navigation-container').outerWidth(true) +$('.logo-container').outerWidth(true) + 2*parseInt($('.header').css('padding-left'))+10;
         function mainHandleResponsiveness(){
-            debugger;
             if($(window).width() < min_width_to_display_nav)
             {
                 $('.navigation-container').hide();

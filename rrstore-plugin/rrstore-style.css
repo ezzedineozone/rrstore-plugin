@@ -70,6 +70,9 @@
 .rrstore-product-page-container{
     @apply flex flex-row w-full h-full justify-center items-center;
 }
+.rrstore-product-page-container.vertical{
+    @apply flex flex-col w-full h-full;
+}
 .rrstore-products-container{
     @apply flex flex-row flex-wrap overflow-x-auto overflow-y-auto w-full h-screen min-h-screen  mt-4 p-2 py-4;
 }
@@ -241,11 +244,20 @@
 .rrstore-product-page-image-container{
     @apply w-1/2 h-screen flex items-center justify-center;
 }
+.rrstore-product-page-image-container.vertical{
+    @apply w-full h-screen flex items-center justify-center;
+}
 .rrstore-product-page-image{
-    @apply w-full h-full object-contain;
+    @apply w-full h-full object-cover ;
+}
+.rrstore-product-page-image.vertical{
+    @apply w-full h-full object-cover;
 }
 .rrstore-product-page-info-container{
     @apply w-1/2 h-max rounded-lg p-5  flex flex-col space-y-2;
+}
+.rrstore-product-page-info-container.vertical{
+    @apply w-full h-max rounded-lg p-5  flex flex-col space-y-2;
 }
 .rrstore-product-page-product-title{
     @apply text-2xl font-bold text-black w-full h-auto;
