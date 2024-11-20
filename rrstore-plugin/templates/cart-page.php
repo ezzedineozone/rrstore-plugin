@@ -88,7 +88,7 @@ if($first_name == 'not provided'):
 <?php
 else :
 ?>
-<div class="w-full h-full space-y-8 p-4 flex flex-col justify-center items-center">
+<div class="w-full h-full space-y-8 p-4 flex flex-col justify-center items-center" id = "html_to_send">
     <h1 class="font-bold text-3xl mb-8 w-2/3">
         Order summary:
     </h1>
@@ -96,10 +96,10 @@ else :
         <p><strong>First Name:</strong> <?php echo $first_name; ?></p>
         <p><strong>Last Name:</strong> <?php echo $last_name; ?></p>
 
-        <p><strong>Email:</strong> <?php echo $email; ?></p>
+        <p id = "user_email"><strong>Email:</strong> <?php echo $email; ?></p>
         <p><strong>Country:</strong> <?php echo $country; ?></p>
 
-        <p><strong>Phone Number:</strong> <?php echo $country_code . '+' . $phone_number; ?></p>
+        <p><strong>Phone Number:</strong> <?php echo $phone_number; ?></p>
         <p><strong>City:</strong> <?php echo $city; ?></p>
 
         <p><strong>Street:</strong> <?php echo $street; ?></p>

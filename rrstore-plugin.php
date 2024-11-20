@@ -894,7 +894,7 @@ function send_email_with_html() {
         $recipient_email = sanitize_email($_POST['recipient_email']);
 
         $subject = 'New HTML Content Submitted';
-        $headers = array('Content-Type: text/html; charset=UTF-8');
+        $headers = array('Content-Type: text/html; charset=UTF-8,');
         $sent = wp_mail($recipient_email, $subject, $html_content, $headers);
         if ($sent) {
             wp_send_json_success('Email sent successfully.');

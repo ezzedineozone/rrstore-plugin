@@ -18,9 +18,9 @@ function sendEmail(htmlContent, recipientEmail) {
         },
         success: function(response) {
             if (response.success) {
-                alert(response.data); // Show success message
+                alert(response.data);
             } else {
-                alert('Error: ' + response.data); // Show error message
+                alert('Error: ' + response.data);
             }
         },
         error: function() {
@@ -232,8 +232,13 @@ function setEventHandlers()
 {
     if($('.rrstore-products-container').length > 0)
         {
-            $('.rrstore-product-card-actions-details').on('click', (e)=>{
-                showProductInfo(e);
+            $('.rrstore-product-card-actions-details').on('click', async (e)=>{
+                debugger;
+                swal_loading();
+                await clearCart_PHP();
+                await addToCart_PHP(get_slug(e.currentTarget.id), 1);
+                swal_loading();
+                window.location.href = cartUrl;
               });
             $('.rrstore-product-card-actions-cart').click(async (e) => {
                 debugger;
@@ -754,6 +759,7 @@ async function update_page_UI()
                     <p>Total: $${(delivery_price)?Number(sub_total) + Number(delivery_price):"NA"}</p>                    
                 </div>
             `);
+            clearCart_PHP();
         }
     }
     else if($('.rrstore-product-page-container').length > 0)
@@ -1279,7 +1285,9 @@ const countries = [
 countries.forEach(country => {
     $('#country-select').append(new Option(country.name, country.code));
 });
-function confirm_order(){
+async function confirm_order(){
+    debugger;
+    sendEmail($('#html_to_send').html(),$('#user_email').text());
     swal_confirmOrder();
 }
 });
