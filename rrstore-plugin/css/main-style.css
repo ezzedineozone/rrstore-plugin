@@ -1398,7 +1398,8 @@ video {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   display: flex;
-  height: 66.666667%;
+  height: -moz-max-content;
+  height: max-content;
   width: calc(25% - 1rem);
   flex-direction: column;
   align-items: center;
@@ -1427,7 +1428,8 @@ video {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   display: flex;
-  height: 66.666667%;
+  height: -moz-max-content;
+  height: max-content;
   width: calc(25% - 1rem);
   flex-direction: column;
   align-items: center;
@@ -1456,7 +1458,8 @@ video {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   display: flex;
-  height: 66.666667%;
+  height: -moz-max-content;
+  height: max-content;
   width: calc(33% - 1rem);
   flex-direction: column;
   align-items: center;
@@ -1485,7 +1488,8 @@ video {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   display: flex;
-  height: 66.666667%;
+  height: -moz-max-content;
+  height: max-content;
   width: calc(50% - 1rem);
   flex-direction: column;
   align-items: center;
@@ -1542,16 +1546,16 @@ video {
   margin-top: 1rem;
   margin-bottom: 1rem;
   display: flex;
-  height: 100%;
-  width: 66.666667%;
+  height: calc(45vh);
+  width: 100%;
   justify-content: center;
 }
 
 .rrstore-product-card-image {
   height: 100%;
   width: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .rrstore-product-card-details {
@@ -1866,7 +1870,7 @@ video {
 .rrstore-cart-page-container.vertical {
   height: -moz-max-content;
   height: max-content;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 
 .rrstore-cart-page-container.vertical > :not([hidden]) ~ :not([hidden]) {
@@ -1878,15 +1882,20 @@ video {
   margin-left: calc(0px * calc(1 - var(--tw-space-x-reverse)));
 }
 
-.rrstore-table-container {
-  height: 100%;
-  width: -moz-fit-content;
-  width: fit-content;
+.rrstore-cart-table-container {
+  margin-top: 1rem;
+  height: auto;
+  width: calc(66%);
+  flex-direction: column;
   border-width: 2px;
   --tw-border-opacity: 1;
-  border-color: rgb(228 195 45 / var(--tw-border-opacity));
+  border-color: rgb(250 204 21 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
   background-color: rgb(254 240 138 / var(--tw-bg-opacity));
+}
+
+.rrstore-cart-table-container.vertical {
+  width: 100%;
 }
 
 .rrstore-cart-user-actions-container {
@@ -1894,8 +1903,7 @@ video {
   display: flex;
   height: -moz-max-content;
   height: max-content;
-  width: 24rem;
-  min-width: 24rem;
+  width: calc(33%);
   flex-direction: column;
   justify-content: flex-start;
 }
@@ -1984,23 +1992,6 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.rrstore-cart-table-container {
-  margin-top: 1rem;
-  height: auto;
-  width: 50%;
-  flex-grow: 1;
-  flex-direction: column;
-  border-width: 2px;
-  --tw-border-opacity: 1;
-  border-color: rgb(250 204 21 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 240 138 / var(--tw-bg-opacity));
-}
-
-.rrstore-cart-table-container.vertical {
-  width: 100%;
-}
-
 .rrstore-cart-table-entry-titles {
   display: flex;
   width: 100%;
@@ -2038,7 +2029,7 @@ video {
 
 .rrstore-cart-table-entry-price {
   width: 16.666667%;
-  flex-shrink: 0;
+  flex-shrink: 1;
   justify-content: center;
   font-weight: 700;
   --tw-text-opacity: 1;
@@ -2048,6 +2039,7 @@ video {
 .rrstore-cart-table-entry-actions {
   display: flex;
   width: 33.333333%;
+  min-width: 12rem;
   flex-shrink: 0;
   flex-direction: row;
 }
