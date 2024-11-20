@@ -245,14 +245,14 @@ function setEventHandlers()
                 await addToCart_PHP(slug, qty-old_qty);
                 let old_html_info = $(info_btn_id).clone(true);
                 $(info_btn_id).replaceWith(`
-                    <div class="relative flex items-center max-w-[10rem] h-full" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
-                        <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                    <div class="relative flex items-center items-stretch h-full" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
+                        <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-12 focus:ring-gray-100  focus:ring-2 focus:outline-none">
                             <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
                             </svg>
                         </button>
-                        <input type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-full text-center text-gray-900 text-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 qty-text-input" value="${qty}" min ="1" max = "999" required />
-                        <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                        <input type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-12 text-center text-gray-900 text-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 qty-text-input" value="${qty}" min ="1" max = "999" required />
+                        <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-12 focus:ring-gray-100  focus:ring-2 focus:outline-none">
                             <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
                             </svg>
@@ -503,14 +503,14 @@ async function update_page_UI()
             let info_btn_id = '#' + slug + '_info';
             let old_html_info = $(info_btn_id).clone(true);
             $(info_btn_id).replaceWith(`
-                <div class="relative flex items-center max-w-[10rem] w-full h-full" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
-                    <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class=" decrement-qty bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-full focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                <div class="relative flex items-center w-full items-stretch h-full" id = '${info_btn_id.substring(1, info_btn_id.length)}'>
+                    <button type="button" id="${slug}_decrement-button" data-input-counter-decrement="quantity-input" class=" decrement-qty bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-12 focus:ring-gray-100 focus:ring-2 focus:outline-none">
                         <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
                         </svg>
                     </button>
-                    <input min ="1" max = "999" type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-full w-full text-center text-gray-900 text-lg focus:ring-blue-500 focus:border-blue-500 block py-2.5  qty-text-input" value="${value}" required />
-                    <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="increment-qty bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-full focus:ring-gray-100  focus:ring-2 focus:outline-none">
+                    <input min ="1" max = "999" type="text" id = '${slug}_qty' data-input-counter aria-describedby="helper-text-explanation" class="bg-gray-50 border-x-0 border-gray-300 h-12 w-1/2 text-center text-gray-900 text-lg focus:ring-blue-500 focus:border-blue-500 block qty-text-input" value="${value}" required />
+                    <button type="button" id="${slug}_increment-button" data-input-counter-increment="quantity-input" class="  increment-qty bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-12 focus:ring-gray-100  focus:ring-2 focus:outline-none">
                         <svg class="w-3 h-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
                         </svg>
