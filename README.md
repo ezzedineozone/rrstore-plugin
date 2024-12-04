@@ -16,12 +16,12 @@ This plugin allows you to easily:
 ### UPCOMING (unfinished or planned):
 - Set delivery price per country
 - Set payment options through online links
-- email reciept / full order information on checkout to user and or admin
+- email reciept / full order information on checkout to user and or admin (uses default SMTP server, needs to be setup)
 
 #### To change the logo and default pic for products without a picture, replace their respective images (png or jpeg) in rrstore-plugin/images
 
 ## showcase
-![image](https://github.com/user-attachments/assets/831ced4d-be3f-44e7-a85d-70f867cdbd8d)
+![image](https://github.com/user-attachments/assets/fd847645-56b4-476a-b694-3966b36aa01b)
 ![image](https://github.com/user-attachments/assets/5e2fe06e-4fb8-4827-a60d-b6d65298f443)
 ![image](https://github.com/user-attachments/assets/badde5dd-ee15-4bcd-822b-f72745467c96)
 
