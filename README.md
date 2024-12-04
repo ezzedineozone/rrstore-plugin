@@ -13,8 +13,7 @@ This plugin allows you to easily:
 - Checkout functionality and extra charges are for you to implement, view cart.js and cart-page.php
 - Resposnive header that includes your primary navigation for both mobile and desktop
 - Responsive UI for both desktop and mobile
-### UPCOMING (unfinished or planned):
-- Set delivery price per country
+- Set delivery price per country (if not set show "we do not deliver to this country" on reciept and dont allow checkout
 - Set payment options through online links
 - email reciept / full order information on checkout to user and or admin (uses default SMTP server, needs to be setup)
 
@@ -24,4 +23,9 @@ This plugin allows you to easily:
 ![image](https://github.com/user-attachments/assets/fd847645-56b4-476a-b694-3966b36aa01b)
 ![image](https://github.com/user-attachments/assets/5e2fe06e-4fb8-4827-a60d-b6d65298f443)
 ![image](https://github.com/user-attachments/assets/badde5dd-ee15-4bcd-822b-f72745467c96)
+
+
+And this is what will be displayed to the user, then emailed to the user if a succesfull checkout happens
+![image](https://github.com/user-attachments/assets/70426f86-e81c-464e-8570-5c91ca0e8a92)
+
 
