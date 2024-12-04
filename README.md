@@ -20,10 +20,9 @@ This plugin allows you to easily:
 #### To change the logo and default pic for products without a picture, replace their respective images (png or jpeg) in rrstore-plugin/images
 
 ## showcase
-![image](https://github.com/user-attachments/assets/fd847645-56b4-476a-b694-3966b36aa01b)
+![image](https://github.com/user-attachments/assets/fadbcecf-3e81-4844-af23-4c6b6660d01e)
 ![image](https://github.com/user-attachments/assets/5e2fe06e-4fb8-4827-a60d-b6d65298f443)
 ![image](https://github.com/user-attachments/assets/badde5dd-ee15-4bcd-822b-f72745467c96)
-
 
 And this is what will be displayed to the user, then emailed to the user if a succesfull checkout happens
 ![image](https://github.com/user-attachments/assets/70426f86-e81c-464e-8570-5c91ca0e8a92)
