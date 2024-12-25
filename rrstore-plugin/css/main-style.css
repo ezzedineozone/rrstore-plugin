@@ -798,10 +798,6 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
-.cursor-not-allowed {
-  cursor: not-allowed !important;
-}
-
 .cursor-pointer {
   cursor: pointer !important;
 }
@@ -954,11 +950,6 @@ video {
 .bg-gray-50 {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity)) !important;
-}
-
-.bg-gray-600 {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(75 85 99 / var(--tw-bg-opacity)) !important;
 }
 
 .bg-red-600 {

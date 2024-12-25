@@ -2,13 +2,37 @@ var user_cart = new Map();
 var table;
 var table_data;
 let page_vertical = false;
+let payment_method = "";
+const omtFees = new Map([
+    [50, 2],
+    [100, 3],
+    [300, 5],
+    [500, 7],
+    [1000, 8],
+    [2000, 12],
+    [3000, 18],
+    [4000, 25],
+    [5000, 35]
+]);
+
+const whishFees = new Map([
+    [100, 1],
+    [200, 2],
+    [300, 3],
+    [1000, 5],
+    [2000, 10],
+    [3000, 15],
+    [4000, 20],
+    [5000, 25]
+]);
 //NOTE FOR FUTURE SELF: every function postfixd by _PHP makes a call to the php client to get or modify information about
 //the cart from the session cookie
 console.log('cart-js loaded');
 jQuery(document).ready(async function($){ 
     console.log($);
-function sendEmail(htmlContent, recipientEmail) {
-    $.ajax({
+async function sendEmail(htmlContent, recipientEmail) {
+    debugger;
+    await $.ajax({
         url: ajax_object.ajax_url,
         type: 'POST',
         data: {
@@ -17,11 +41,6 @@ function sendEmail(htmlContent, recipientEmail) {
             recipient_email: recipientEmail
         },
         success: function(response) {
-            if (response.success) {
-                alert(response.data);
-            } else {
-                alert('Error: ' + response.data);
-            }
         },
         error: function() {
             alert('An error occurred while sending the email.');
@@ -400,10 +419,19 @@ function setEventHandlers()
             })
             if($('#reciept-cart').length > 0)
             {
-                $('#confirm-order-button').click(()=>{
-                    confirm_order();
+                $('#confirm-order-button').click(async ()=>{
+                    await confirm_order();
+                    clearCart_PHP();
                 });
             }
+            $('#omt').click(()=>{
+                payment_method = "omt";
+                populate_reciept();
+            });
+            $('#whish').click(()=>{
+                payment_method = "whish";
+                populate_reciept();
+            });
         }
         else if($('.rrstore-product-page-container').length > 0)
         {
@@ -732,34 +760,7 @@ async function update_page_UI()
         });
         if($('#reciept-cart').length>0)
         {
-            debugger;
-            let sub_total = 0;
-            const url = new URL(window.location.href);
-            const params = new URLSearchParams(url.search);
-            const countryParam = params.get('country');
-            let delivery_price = await getCountryDeliveryPrice(countryParam);
-            for(let [key,value] of user_cart)
-            {
-                sub_total += await getProductPrice_PHP(key) * value;
-            }
-            for(let [key, value] of user_cart){
-                const entry = `
-                    <div class="flex justify-between w-full py-2 border-b">
-                        <span>${key}</span>
-                        <span>$${await getProductPrice_PHP(key) * value}</span>
-                    </div>
-                `;
-                $('#reciept-cart').append(entry);
-            }
-            debugger;
-            $('#reciept-cart').append(`
-                <div class = "w-full flex flex-col justify-end items-end space-y-2 mt-4 text-lg font-bold">
-                    <p>Subtotal: $${sub_total}</p>
-                    <p>Delivery: $${(delivery_price)?delivery_price:"We do not deliver to this country."}</p>
-                    <p>Total: $${(delivery_price)?Number(sub_total) + Number(delivery_price):"NA"}</p>                    
-                </div>
-            `);
-            clearCart_PHP();
+            await populate_reciept();
         }
     }
     else if($('.rrstore-product-page-container').length > 0)
@@ -1281,13 +1282,185 @@ const countries = [
     { code: "ZM", name: "Zambia" },
     { code: "ZW", name: "Zimbabwe" }
 ];
-// Populate the select element with country options
 countries.forEach(country => {
     $('#country-select').append(new Option(country.name, country.code));
 });
 async function confirm_order(){
     debugger;
-    sendEmail($('#html_to_send').html(),$('#user_email').text());
+    let html_email = await create_html_for_email();
+    await sendEmail(html_email, $('#user_email').text().split(':')[1]);
+    await sendEmail(html_email, "Hello@ridersrights.me");
     swal_confirmOrder();
+}
+function createUserDetailsHtml() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const firstName = urlParams.get("first_name") || "N/A";
+    const lastName = urlParams.get("last_name") || "N/A";
+    const email = urlParams.get("email") || "N/A";
+    const country = urlParams.get("country") || "N/A";
+    const phoneNumber = urlParams.get("phone_number") || "N/A";
+    const city = urlParams.get("city") || "N/A";
+    const street = urlParams.get("street") || "N/A";
+    const rawAddressLine = queryString.match(/address\+line=([^&]*)/);
+    const addressLine = rawAddressLine ? decodeURIComponent(rawAddressLine[1].replace(/\+/g, ' ')) : "N/A";
+    const userDetailsHtml = `
+    <div style="display: grid; font-size: 1.25rem; grid-template-columns: repeat(2, 1fr); gap: 1rem; max-width: 66%;">
+        <p><strong>First Name:</strong> ${firstName}</p>
+        <p><strong>Last Name:</strong> ${lastName}</p>
+        <p id="user_email"><strong>Email:</strong> ${email}</p>
+        <p><strong>Country:</strong> ${country}</p>
+        <p><strong>Phone Number:</strong> ${phoneNumber}</p>
+        <p><strong>City:</strong> ${city}</p>
+        <p><strong>Street:</strong> ${street}</p>
+        <p><strong>Address Line:</strong> ${addressLine}</p>
+    </div>
+    `;
+
+    return userDetailsHtml;
+}
+async function create_html_for_email() {
+
+    const userDetailsHtml = createUserDetailsHtml();
+    let receiptItemsHtml = "";
+    for (const [product, count] of user_cart) {
+        const price = count * await getProductPrice_PHP(product);
+        receiptItemsHtml += `
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">${product}</td>
+            <td style="padding: 8px; font-weight: bold; text-align: right;">$${price}</td>
+        </tr>
+        `;
+    }
+    let sub_total = 0;
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const countryParam = params.get('country');
+    let delivery_price = await getCountryDeliveryPrice(countryParam);
+    for (let [key, value] of user_cart) {
+        sub_total += await getProductPrice_PHP(key) * value;
+    }
+    const prices = `
+    <tr>
+        <td style="padding: 8px; font-weight: bold; text-align: right;">Subtotal:</td>
+        <td style="padding: 8px; font-weight: bold; text-align: right;">$${sub_total}</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px; font-weight: bold; text-align: right;">Delivery:</td>
+        <td style="padding: 8px; font-weight: bold; text-align: right;">${delivery_price ? "$" + delivery_price : "We do not deliver to this country."}</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px; font-weight: bold; text-align: right;">Payment fees:</td>
+        <td style="padding: 8px; font-weight: bold; text-align: right;">${(payment_method === "") ? "Select a payment method" : "$" + calculateFees(Number(sub_total) + Number(delivery_price))}</td>
+    </tr>
+    <tr>
+        <td style="padding: 8px; font-weight: bold; text-align: right;">Total:</td>
+        <td style="padding: 8px; font-weight: bold; text-align: right;">${(delivery_price && payment_method) ? "$" + (Number(sub_total) + Number(delivery_price) + Number(calculateFees(Number(sub_total) + Number(delivery_price)))) : "NA"}</td>
+    </tr>
+    `;
+
+    const receiptHtml = `
+    <table style="width: 100%; max-width: 600px; border-collapse: collapse; border: 1px solid #000; font-family: Arial, sans-serif;">
+        <thead>
+            <tr>
+                <th style="padding: 8px; border-bottom: 1px solid #000; text-align: left; font-size: 16px;">Item</th>
+                <th style="padding: 8px; border-bottom: 1px solid #000; text-align: right; font-size: 16px;">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${receiptItemsHtml}
+            ${prices}
+        </tbody>
+    </table>
+    `;
+    let payment_details = "";
+    if (payment_method === 'omt') {
+        payment_details = `<p style="font-weight: bold;">You selected OMT. Pay the above amount to Account name: Chadi Faraj through OMT.</p>`;
+    } else if (payment_method === 'whish') {
+        payment_details = `<p style="font-weight: bold;">You selected Whish. Pay the above amount to 03 142 379 through Whish.</p>`;
+    }
+
+    const fullHtml = `
+    <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #333;">
+        ${userDetailsHtml}
+        <div style="margin: 20px 0;">
+            ${receiptHtml}
+        </div>
+        <div style="margin-top: 20px;">
+            ${payment_details}
+        </div>
+    </div>
+    `;
+    return fullHtml;
+}
+
+function getFee(amount, feeMap) {
+    for (const [maxAmount, fee] of feeMap.entries()) {
+        if (amount <= maxAmount) {
+            return fee;
+        }
+    }
+    return 0;
+}
+
+function calculateFees(amount) {
+    let fee = 0;
+
+    if (payment_method === "omt") {
+        fee = getFee(amount, omtFees);
+    } else if (payment_method === "whish") {
+        fee = getFee(amount, whishFees);
+    } else {
+        console.log("Invalid payment method. Please choose 'omt' or 'whish'.");
+    }
+    return fee;
+}
+async function populate_reciept(){
+    swal_loading();
+    const defaultHTML = `
+    <div class="w-full h-max p-2 flex justify-between">
+    <p class="font-bold text-lg">Item</p>
+    <p class="font-bold text-lg">Price</p>
+    </div>
+    <div class="w-full h-max py-2 px-2 flex justify-end items-end" id="reciept-cart-entry"></div>
+    `;
+    $('#reciept-cart').html(defaultHTML);
+    let sub_total = 0;
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    const countryParam = params.get('country');
+    let delivery_price = await getCountryDeliveryPrice(countryParam);
+    for(let [key,value] of user_cart)
+    {
+        sub_total += await getProductPrice_PHP(key) * value;
+    }
+    for(let [key, value] of user_cart){
+        const entry = `
+            <div class="flex justify-between w-full py-2 border-b">
+                <span>${key}</span>
+                <span>$${await getProductPrice_PHP(key) * value}</span>
+            </div>
+        `;
+        $('#reciept-cart').append(entry);
+    }
+    $('#reciept-cart').append(`
+        <div class = "w-full flex flex-col justify-end items-end space-y-2 mt-4 text-lg font-bold">
+            <p>Subtotal: $${sub_total}</p>
+            <p>Delivery: $${(delivery_price)?delivery_price:"We do not deliver to this country."}</p>
+            <p>Payment fees:${(payment_method === "")?" select a payment method":"$"+calculateFees(Number(sub_total) + Number(delivery_price))}<p>
+            <p>Total: $${(delivery_price && payment_method)?Number(sub_total) + Number(delivery_price) + Number(calculateFees(Number(sub_total) + Number(delivery_price))):"NA"}</p>                    
+        </div>
+    `);
+    if(delivery_price && payment_method){
+        $('#confirm-order-button').removeClass('rrstore-disabled bg-gray-400');
+        $('#confirm-order-button').addClass('bg-yellow-custom');
+        $('#missing-input-checkout').text("");
+    }
+    else{
+        $('#confirm-order-button').removeClass('bg-yellow-custom');
+        $('#confirm-order-button').addClass('rrstore-disabled bg-gray-400');
+        $('#missing-input-checkout').text("Select payment first");
+    }
+    swal_loading();
 }
 });

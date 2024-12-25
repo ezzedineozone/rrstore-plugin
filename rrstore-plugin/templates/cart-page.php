@@ -132,24 +132,25 @@ else :
                 <li>No payment methods available. If youre admin, add them from wp-admin under products</li>
             <?php endif; ?> -->
             <div class = " flex flex-row space-x-2">
+                <input type="radio" id="omt" name="payment_method" value="OMT" class="w-6 h-6" o />
                 <p class = "font-bold text-black text-2xl"> OMT: </p>
                 <p class=" text-2xl font-semibold text-blue-400 underline" > Chadi Faraj </p>
+                <p class = "text-2xl font-semibold text-gray-400 underline"> (Fees apply) </p>
             </div>
             <div class = " flex flex-row space-x-2">
+                <input type="radio" id="whish" name="payment_method" value="Whish" class="w-6 h-6" />
                 <p class = "font-bold text-black text-2xl"> Whish: </p>
                 <p class=" text-2xl font-semibold text-blue-400 underline" > 03 142 379 </p>
+                <p class = "text-2xl font-semibold text-gray-400 underline"> (10% Fees apply) </p>
             </div>
-            <?php if($delivery_price != -1): ?>
             <div class = "flex flex-row space-x-2 justify-center items-center mt-4">
                 <button class = "px-4 py-2 w-max bg-yellow-custom text-lg font-bold text-white" id = "confirm-order-button">Confirm order</button>
+                <p id="missing-input-checkout"></p>
             </div>
-            <?php else : ?>
-                <div class = "flex flex-row space-x-2 justify-center items-center mt-4">
-                    <button class = "px-4 py-2 w-max bg-gray-600 text-lg font-bold text-gray-300 cursor-not-allowed" disabled id = "confirm-order-button">Confirm order</button>
-                    <p class = "text-sm text-gray-400">No delivery options </p>
-                </div>
-            <?php endif; ?>
         </div>
+    </div>
+    <div id = "temp-test">
+
     </div>
 </div>
 

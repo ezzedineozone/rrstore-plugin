@@ -892,8 +892,7 @@ function send_email_with_html() {
     if (isset($_POST['html_content']) && isset($_POST['recipient_email'])) {
         $html_content = wp_kses_post($_POST['html_content']);
         $recipient_email = sanitize_email($_POST['recipient_email']);
-
-        $subject = 'New HTML Content Submitted';
+        $subject = 'New Order recieved';
         $headers = array('Content-Type: text/html; charset=UTF-8,');
         $sent = wp_mail($recipient_email, $subject, $html_content, $headers);
         if ($sent) {
